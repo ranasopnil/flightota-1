@@ -7,22 +7,17 @@ import { LogoMark } from "@/components/common/logo";
 import { StatusBadge } from "@/components/common/status-badge";
 import { getSharePage, shareImageForPath, sharePages } from "@/config/share";
 import { siteConfig } from "@/config/site";
-import { getSolutionBySlug, travelSolutions } from "@/constants/solutions";
 import { getProduct, listProducts } from "@/services/server/catalog-repository";
-import { getBlogPost, getGuide, listBlogPosts, listGuides } from "@/services/server/content-repository";
+import { getEntry, listEntries } from "@/services/server/cms-repository";
 import { formatIsoDate } from "@/utils/format";
 
 export async function generateStaticParams() {
-  const [products, posts, guidesList] = await Promise.all([
-    listProducts(),
-    listBlogPosts(),
-    listGuides(),
-  ]);
+  const [products, posts, guidesList, solutions] = await Promise.all([listProducts(), listEntries("blog"), listEntries("guides"), listEntries("solutions")]);
 
   return [
     ...Object.keys(sharePages).map((path) => ({ slug: path.slice(1).split("/") })),
     ...products.flatMap((p) => [{ slug: ["apis", p.slug] }, { slug: ["documentation", p.slug] }]),
-    ...travelSolutions.map((s) => ({ slug: ["solutions", s.slug] })),
+    ...solutions.map((s) => ({ slug: ["solutions", s.slug] })),
     ...posts.map((b) => ({ slug: ["blog", b.slug] })),
     ...guidesList.map((g) => ({ slug: ["guides", g.slug] })),
   ];
@@ -190,7 +185,7 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
   }
 
   if (type === "solutions" && itemSlug) {
-    const solution = getSolutionBySlug(itemSlug);
+    const solution = await getEntry("solutions", itemSlug);
     if (!solution) notFound();
 
     return (
@@ -206,7 +201,7 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
   }
 
   if (type === "blog" && itemSlug) {
-    const post = await getBlogPost(itemSlug);
+    const post = await getEntry("blog", itemSlug);
     if (!post) notFound();
 
     return (
@@ -226,7 +221,7 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
   }
 
   if (type === "guides" && itemSlug) {
-    const guide = await getGuide(itemSlug);
+    const guide = await getEntry("guides", itemSlug);
     if (!guide) notFound();
 
     return (

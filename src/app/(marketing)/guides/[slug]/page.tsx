@@ -3,23 +3,23 @@ import { notFound } from "next/navigation";
 import { ArticleLayout } from "@/components/common/article-layout";
 import { pageMetadata } from "@/config/share";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
-import { getGuide, listGuides } from "@/services/server/content-repository";
+import { getEntry, listEntries } from "@/services/server/cms-repository";
 
 export async function generateStaticParams() {
-  const guides = await listGuides();
+  const guides = await listEntries("guides");
   return guides.map((g) => ({ slug: g.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/guides/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const guide = await getGuide(slug);
+  const guide = await getEntry("guides", slug);
   if (!guide) return { title: "Guide not found" };
-  return pageMetadata({ title: guide.title, description: guide.excerpt, path: `/guides/${guide.slug}`, publishedTime: guide.publishedAt });
+  return pageMetadata({ title: guide.seo?.title ?? guide.title, description: guide.seo?.description ?? guide.excerpt, path: `/guides/${guide.slug}`, publishedTime: guide.publishedAt });
 }
 
 export default async function GuidePage({ params }: PageProps<"/guides/[slug]">) {
   const { slug } = await params;
-  const guide = await getGuide(slug);
+  const guide = await getEntry("guides", slug);
   if (!guide) notFound();
   return (
     <>

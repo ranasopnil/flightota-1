@@ -10,7 +10,7 @@ import {
   ArrowDownAZ,
   ArrowUpZA,
 } from "lucide-react";
-import { AIRLINES_DATA } from "@/features/airlines/airlines-data";
+import type { AirlineItem } from "@/types/airlines";
 import { AirlineLogo } from "@/features/airlines/components/airline-logo";
 import { Pagination } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-function AirlinesExplorerContent() {
+function AirlinesExplorerContent({ airlines }: { airlines: AirlineItem[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -105,7 +105,7 @@ function AirlinesExplorerContent() {
   };
 
   // 1. Filter by category (ndc, lcc, all)
-  const categoryFiltered = AIRLINES_DATA.filter((airline) => {
+  const categoryFiltered = airlines.filter((airline) => {
     if (activeTab === "ndc") return airline.category === "ndc";
     if (activeTab === "lcc") return airline.category === "lcc";
     return true;
@@ -139,8 +139,8 @@ function AirlinesExplorerContent() {
     return a.name.localeCompare(b.name);
   });
 
-  const ndcCount = AIRLINES_DATA.filter((a) => a.category === "ndc").length;
-  const lccCount = AIRLINES_DATA.filter((a) => a.category === "lcc").length;
+  const ndcCount = airlines.filter((a) => a.category === "ndc").length;
+  const lccCount = airlines.filter((a) => a.category === "lcc").length;
 
   // Pagination calculation based on sorted list
   const totalPages = Math.ceil(sortedAirlines.length / ITEMS_PER_PAGE);
@@ -166,7 +166,7 @@ function AirlinesExplorerContent() {
           >
             <span>All Airlines</span>
             <span className="rounded-full bg-primary/10 px-1.5 py-0.2 text-[10px] font-bold text-primary">
-              {AIRLINES_DATA.length}
+              {airlines.length}
             </span>
           </button>
 
@@ -331,7 +331,7 @@ function AirlinesExplorerContent() {
   );
 }
 
-export function AirlinesExplorer() {
+export function AirlinesExplorer({ airlines }: { airlines: AirlineItem[] }) {
   return (
     <Suspense
       fallback={
@@ -345,7 +345,7 @@ export function AirlinesExplorer() {
         </div>
       }
     >
-      <AirlinesExplorerContent />
+      <AirlinesExplorerContent airlines={airlines} />
     </Suspense>
   );
 }

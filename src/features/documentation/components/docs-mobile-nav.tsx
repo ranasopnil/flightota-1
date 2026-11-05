@@ -4,10 +4,10 @@ import { PanelLeft } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import type { DocsNavProduct } from "../docs-nav";
+import type { DocsNavProduct, DocsOverviewLink } from "../docs-nav";
 import { DocsSidebar } from "./docs-sidebar";
 
-export function DocsMobileNav({ products }: { products: DocsNavProduct[] }) {
+export function DocsMobileNav({ products, overviewSections }: { products: DocsNavProduct[]; overviewSections: DocsOverviewLink[] }) {
   const [open, setOpen] = useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -21,7 +21,7 @@ export function DocsMobileNav({ products }: { products: DocsNavProduct[] }) {
           <SheetTitle>Documentation</SheetTitle>
         </SheetHeader>
         <div className="px-3 sm:px-4 pb-8">
-          <DocsSidebar products={products} onNavigate={() => setOpen(false)} />
+          <DocsSidebar products={products} overviewSections={overviewSections} onNavigate={() => setOpen(false)} />
         </div>
       </SheetContent>
     </Sheet>

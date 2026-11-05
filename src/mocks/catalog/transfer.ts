@@ -1,7 +1,7 @@
 import type { ApiErrorExample, ApiProduct } from "@/types/catalog";
-import { pingResponse } from "../content/hotels-guide";
+import { pingResponse } from "@/content/api-guides/hotels";
 import { partnerAccess } from "../content/partner-api";
-import * as s from "../content/transfers-guide";
+import * as s from "@/content/api-guides/transfers";
 import { body, err, idempotencyKey, pathParam, query } from "./partner";
 
 const accessErrors: ApiErrorExample[] = [

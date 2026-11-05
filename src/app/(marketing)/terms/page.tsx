@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
-import { staticPageMetadata } from "@/config/share";
+import { notFound } from "next/navigation";
 import { LegalDocument } from "@/components/common/legal-document";
-import { legalLastUpdated, termsSections } from "@/mocks/content/legal";
+import { staticPageMetadata } from "@/config/share";
+import { getEntry } from "@/services/server/cms-repository";
 
 export const metadata: Metadata = staticPageMetadata("/terms");
 
-export default function TermsPage() {
-  return (
-    <LegalDocument
-      path="/terms"
-      title="Terms & Conditions"
-      description="Please read these terms carefully before using the platform or the APIs."
-      updatedAt={legalLastUpdated}
-      sections={termsSections}
-    />
-  );
+export default async function TermsPage() {
+  const doc = await getEntry("legal", "terms");
+  if (!doc) notFound();
+  return <LegalDocument doc={doc} path="/terms" />;
 }

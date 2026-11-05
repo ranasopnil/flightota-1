@@ -1,5 +1,5 @@
 import type { ApiEndpoint, ApiErrorExample, ApiParam, ApiProduct } from "@/types/catalog";
-import * as s from "../content/flights-samples";
+import * as s from "@/content/api-guides/flights-samples";
 import { partnerAccess } from "../content/partner-api";
 import { body, err, idempotencyKey, query } from "./partner";
 

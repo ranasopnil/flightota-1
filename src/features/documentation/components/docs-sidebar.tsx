@@ -9,17 +9,17 @@ import { MethodBadge } from "@/components/common/status-badge";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import type { HttpMethod } from "@/types/catalog";
-import { docsGuideSections, type DocsNavProduct } from "../docs-nav";
+import type { DocsNavProduct, DocsOverviewLink } from "../docs-nav";
 
 /** Searchable docs navigation: guide sections, API references and individual endpoints. */
-export function DocsSidebar({ products, onNavigate }: { products: DocsNavProduct[]; onNavigate?: () => void }) {
+export function DocsSidebar({ products, overviewSections, onNavigate }: { products: DocsNavProduct[]; overviewSections: DocsOverviewLink[]; onNavigate?: () => void }) {
   const pathname = usePathname();
   const [query, setQuery] = useState("");
   const q = query.trim().toLowerCase();
 
   const results = useMemo<{ key: string; href: string; label: string; hint: string; method?: HttpMethod }[] | null>(() => {
     if (!q) return null;
-    const sections = docsGuideSections
+    const sections = overviewSections
       .filter((s) => s.label.toLowerCase().includes(q))
       .map((s) => ({ key: s.id, href: `/documentation#${s.id}`, label: s.label, hint: "Guide" }));
     const chapters = products.flatMap((p) =>
@@ -33,7 +33,7 @@ export function DocsSidebar({ products, onNavigate }: { products: DocsNavProduct
         .map((e) => ({ key: `${p.slug}-${e.id}`, href: `/documentation/${p.slug}#${e.id}`, label: e.summary, hint: p.name, method: e.method })),
     );
     return [...sections, ...chapters, ...endpoints].slice(0, 30);
-  }, [q, products]);
+  }, [q, products, overviewSections]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -77,7 +77,7 @@ export function DocsSidebar({ products, onNavigate }: { products: DocsNavProduct
           <nav aria-label="Guides">
             <p className="mb-2 px-2.5 text-xs font-semibold tracking-wider text-muted-foreground uppercase">Guides</p>
             <ul className="flex flex-col">
-              {docsGuideSections.map((s) => (
+              {overviewSections.map((s) => (
                 <li key={s.id}>
                   <Link
                     href={`/documentation#${s.id}`}

@@ -11,26 +11,19 @@ import { Button } from "@/components/ui/button";
 import { pageMetadata } from "@/config/share";
 import { siteConfig } from "@/config/site";
 import { ApiGuideView } from "@/features/documentation/components/api-guide-view";
-import { getApiGuide } from "@/mocks/content/api-guides";
+import { imageSrc } from "@/lib/image-src";
 import { getProduct, listProducts } from "@/services/server/catalog-repository";
-
-const HERO_IMAGE_MAP: Record<string, string> = {
-  "air-travel-api": "/images/categories/flight.jpg",
-  "hotel-api": "/images/categories/hotel.jpg",
-  "esim-api": "/images/categories/esim.jpg",
-  "visa-api": "/images/categories/visa.jpg",
-  "airport-transfer-api": "/images/categories/transfer.jpg",
-  "car-rental-api": "/images/categories/car_rental.jpg",
-  "activities-api": "/images/categories/activities.jpg",
-};
+import { getEntry, getSingleton } from "@/services/server/cms-repository";
 
 export async function generateStaticParams() {
   const products = await listProducts();
   return products.map((p) => ({ slug: p.slug }));
 }
 
-const referenceDescription = (name: string) =>
-  `API reference for the ${name}: endpoints, parameters, request and response examples, and errors.`;
+async function referenceDescription(name: string) {
+  const overview = await getSingleton("docs-overview");
+  return overview.referenceDescriptionTemplate.replace("{{name}}", name);
+}
 
 export async function generateMetadata({ params }: PageProps<"/documentation/[slug]">): Promise<Metadata> {
   const { slug } = await params;
@@ -38,7 +31,7 @@ export async function generateMetadata({ params }: PageProps<"/documentation/[sl
   if (!product) return { title: "Documentation not found" };
   return pageMetadata({
     title: `${product.name} reference`,
-    description: referenceDescription(product.name),
+    description: await referenceDescription(product.name),
     path: `/documentation/${product.slug}`,
   });
 }
@@ -47,14 +40,15 @@ export default async function ApiReferencePage({ params }: PageProps<"/documenta
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
-  const guide = getApiGuide(product.slug);
+  const [guide, overview] = await Promise.all([getEntry("api-guides", product.slug), getSingleton("docs-overview")]);
   const baseUrl = product.access?.sandboxUrl ?? siteConfig.sandboxUrl;
+  const description = overview.referenceDescriptionTemplate.replace("{{name}}", product.name);
 
   return (
     <div>
       <header className="relative mb-4 overflow-hidden rounded-lg border border-slate-800 bg-slate-950 p-4 sm:mb-6 sm:p-6 text-white ">
         <Image
-          src={HERO_IMAGE_MAP[product.slug] || "/images/hero/hero_flight.jpg"}
+          src={imageSrc(overview.productHeroImages[product.slug] ?? overview.defaultProductHeroImage)}
           alt={product.name}
           fill
           priority
@@ -89,7 +83,7 @@ export default async function ApiReferencePage({ params }: PageProps<"/documenta
             </Button>
             <ShareEmbedModal
               title={`${product.name} reference`}
-              description={referenceDescription(product.name)}
+              description={description}
               path={`/documentation/${product.slug}`}
               size="sm"
               variant="outline"
@@ -110,7 +104,7 @@ export default async function ApiReferencePage({ params }: PageProps<"/documenta
 
       {guide && (
         <h2 id="endpoint-reference" className="mt-10 scroll-mt-24 font-heading text-2xl font-semibold tracking-tight">
-          Endpoint reference
+          {overview.referenceHeading}
         </h2>
       )}
       <div className="flex flex-col">

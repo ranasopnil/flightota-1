@@ -16,13 +16,8 @@ export interface DocsNavProduct {
   guideSections: { id: string; label: string }[];
 }
 
-/** Sections of the documentation overview page (anchors on /documentation). */
-export const docsGuideSections = [
-  { id: "getting-started", label: "Getting started" },
-  { id: "conventions", label: "Conventions" },
-  { id: "api-overview", label: "API overview" },
-  { id: "errors", label: "Errors" },
-  { id: "retries", label: "Retries" },
-  { id: "updates", label: "Updates" },
-  { id: "code-examples", label: "Code examples" },
-] as const;
+/** An anchor on the documentation overview page (/documentation). */
+export interface DocsOverviewLink {
+  id: string;
+  label: string;
+}

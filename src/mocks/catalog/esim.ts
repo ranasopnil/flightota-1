@@ -1,6 +1,6 @@
 import type { ApiErrorExample, ApiProduct } from "@/types/catalog";
-import * as s from "../content/esim-guide";
-import { pingResponse } from "../content/hotels-guide";
+import * as s from "@/content/api-guides/esim";
+import { pingResponse } from "@/content/api-guides/hotels";
 import { partnerAccess } from "../content/partner-api";
 import { body, err, idempotencyKey, pathParam, query } from "./partner";
 

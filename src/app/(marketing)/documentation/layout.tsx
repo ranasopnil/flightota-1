@@ -3,29 +3,35 @@ import { Container } from "@/components/common/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DocsMobileNav } from "@/features/documentation/components/docs-mobile-nav";
 import { DocsSidebar } from "@/features/documentation/components/docs-sidebar";
-import type { DocsNavProduct } from "@/features/documentation/docs-nav";
-import { getApiGuide } from "@/mocks/content/api-guides";
+import type { DocsNavProduct, DocsOverviewLink } from "@/features/documentation/docs-nav";
 import { listProductsDetailed } from "@/services/server/catalog-repository";
+import { getSingleton, listEntries } from "@/services/server/cms-repository";
 
-async function getNav(): Promise<DocsNavProduct[]> {
-  const products = await listProductsDetailed();
+async function getNav(): Promise<{ products: DocsNavProduct[]; overviewSections: DocsOverviewLink[] }> {
+  const [products, guides, overview] = await Promise.all([listProductsDetailed(), listEntries("api-guides"), getSingleton("docs-overview")]);
+  const bySlug = new Map(guides.map((g) => [g.slug, g]));
   // Products documented by a partner guide come first; the nav follows those guides.
-  const ordered = [...products].sort((a, b) => Number(Boolean(getApiGuide(b.slug))) - Number(Boolean(getApiGuide(a.slug))));
-  return ordered.map((p) => ({
-    slug: p.slug,
-    name: p.name,
-    category: p.category,
-    endpoints: p.endpoints.map(({ id, method, path, summary }) => ({ id, method, path, summary })),
-    guideSections: getApiGuide(p.slug)?.sections.map((s) => ({ id: s.id, label: s.title })) ?? [],
-  }));
+  const ordered = [...products].sort((a, b) => Number(bySlug.has(b.slug)) - Number(bySlug.has(a.slug)));
+  return {
+    products: ordered.map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      category: p.category,
+      endpoints: p.endpoints.map(({ id, method, path, summary }) => ({ id, method, path, summary })),
+      guideSections: bySlug.get(p.slug)?.sections.map((s) => ({ id: s.id, label: s.title })) ?? [],
+    })),
+    overviewSections: overview.sections.map((s) => ({ id: s.id, label: s.title })),
+  };
 }
 
 async function Sidebar() {
-  return <DocsSidebar products={await getNav()} />;
+  const nav = await getNav();
+  return <DocsSidebar products={nav.products} overviewSections={nav.overviewSections} />;
 }
 
 async function MobileNav() {
-  return <DocsMobileNav products={await getNav()} />;
+  const nav = await getNav();
+  return <DocsMobileNav products={nav.products} overviewSections={nav.overviewSections} />;
 }
 
 export default function DocumentationLayout({ children }: LayoutProps<"/documentation">) {

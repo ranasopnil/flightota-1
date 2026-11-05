@@ -1,91 +1,44 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  CheckCircle2,
-  HelpCircle,
-  Sparkles,
-  Workflow,
-  Users,
-  Percent,
-  Wallet,
-  FileCheck,
-  Calendar,
-  CreditCard,
-  Smartphone,
-  ShieldAlert,
-  CheckCircle,
-  FileSpreadsheet,
-  MapPin,
-  Tag,
-  Hotel,
-  CalendarCheck,
-  Utensils,
-  QrCode,
-  Cpu,
-  Banknote,
-  TrendingUp,
-  type LucideIcon,
-} from "lucide-react";
+import { CheckCircle2, HelpCircle, Workflow } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HeroActions } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
+import { Icon } from "@/components/common/icon-map";
 import { PageHero } from "@/components/common/page-hero";
-import { getSolutionBySlug, travelSolutions } from "@/constants/solutions";
 import { pageMetadata } from "@/config/share";
-import { ShareEmbedModal } from "@/components/common/share-embed-modal";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { TravelErpShowcase } from "@/features/solutions/components/travel-erp-showcase";
+import { imageSrc } from "@/lib/image-src";
+import { getEntry, getSingleton, listEntries } from "@/services/server/cms-repository";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Users,
-  Percent,
-  Wallet,
-  FileCheck,
-  Calendar,
-  CreditCard,
-  Smartphone,
-  ShieldAlert,
-  CheckCircle,
-  FileSpreadsheet,
-  MapPin,
-  Tag,
-  Hotel,
-  CalendarCheck,
-  Utensils,
-  QrCode,
-  Cpu,
-  Banknote,
-  TrendingUp,
-};
-
-function getBenefitIcon(iconName: string): LucideIcon {
-  return ICON_MAP[iconName] || Sparkles;
-}
-
 export async function generateStaticParams() {
-  return travelSolutions.map((s) => ({ slug: s.slug }));
+  const solutions = await listEntries("solutions");
+  return solutions.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const solution = getSolutionBySlug(slug);
+  const solution = await getEntry("solutions", slug);
   if (!solution) return {};
 
-  return pageMetadata({ title: solution.title, description: solution.description, path: `/solutions/${slug}` });
+  return pageMetadata({ title: solution.seo?.title ?? solution.title, description: solution.seo?.description ?? solution.description, path: `/solutions/${slug}` });
 }
 
 export default async function SolutionDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const solution = getSolutionBySlug(slug);
+  const [solution, page] = await Promise.all([getEntry("solutions", slug), getSingleton("solutions-page")]);
 
   if (!solution) {
     notFound();
   }
 
+  const { detail } = page;
   const isErpPage = slug === "travel-erp-backoffice";
 
   return (
@@ -101,7 +54,7 @@ export default async function SolutionDetailPage({ params }: PageProps) {
         badge={solution.badge}
         title={solution.title}
         description={solution.description}
-        image={solution.heroImage}
+        image={imageSrc(solution.heroImage)}
         metrics={
           <>
             {solution.metrics.map((m) => (
@@ -115,27 +68,14 @@ export default async function SolutionDetailPage({ params }: PageProps) {
           </>
         }
         actions={
-          <>
-            <Button asChild size="sm" className="rounded-lg text-xs font-semibold h-7">
-              <Link href="/contact?topic=sales">Book Live Demo</Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="rounded-lg text-xs font-semibold h-7 border-white/20 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md"
-            >
-              <Link href="/pricing#portal-solutions">View Pricing Plans &rarr;</Link>
-            </Button>
-            <ShareEmbedModal
-              title={solution.title}
-              description={solution.description}
-              path={`/solutions/${slug}`}
-              size="sm"
-              variant="outline"
-              className="rounded-lg text-xs font-semibold h-7 border-white/20 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md"
-            />
-          </>
+          <HeroActions
+            actions={[
+              { ...detail.demoCta, variant: "primary" },
+              { ...detail.pricingCta, variant: "outline" },
+            ]}
+            path={`/solutions/${slug}`}
+            share={{ title: solution.title, description: solution.description }}
+          />
         }
       />
 
@@ -146,43 +86,40 @@ export default async function SolutionDetailPage({ params }: PageProps) {
         {/* Key Strategic Advantages Grid */}
         <div>
           <div className="max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">Strategic Advantages</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">{detail.advantages.eyebrow}</span>
             <h2 className="mt-2 font-heading text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Built for Scale, Automation &amp; Maximum Margin
+              {detail.advantages.title}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-              Designed around the operational realities of high-volume travel consolidators, online agencies, and corporate TMCs.
+              {detail.advantages.description}
             </p>
           </div>
 
           <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {solution.keyBenefits.map((benefit) => {
-              const Icon = getBenefitIcon(benefit.icon);
-              return (
-                <div
-                  key={benefit.title}
-                  className="rounded-xl border border-border/80 bg-card p-5 transition-all hover:border-primary/50"
-                >
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary font-bold">
-                    <Icon className="size-5" />
-                  </div>
-                  <h3 className="mt-4 font-heading text-base font-bold text-foreground">{benefit.title}</h3>
-                  <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">{benefit.desc}</p>
+            {solution.keyBenefits.map((benefit) => (
+              <div
+                key={benefit.title}
+                className="rounded-xl border border-border/80 bg-card p-5 transition-all hover:border-primary/50"
+              >
+                <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary font-bold">
+                  <Icon name={benefit.icon} className="size-5" />
                 </div>
-              );
-            })}
+                <h3 className="mt-4 font-heading text-base font-bold text-foreground">{benefit.title}</h3>
+                <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">{benefit.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Architecture & Workflow Lifecycle Steps */}
         <div className="rounded-xl border border-border/80 bg-muted/30 p-6 sm:p-10">
           <div className="max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">System Lifecycle</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">{detail.lifecycle.eyebrow}</span>
             <h2 className="mt-2 font-heading text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              End-to-End Operational Workflow
+              {detail.lifecycle.title}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-              From onboarding and rule configuration to real-time execution and automated ledger reconciliation.
+              {detail.lifecycle.description}
             </p>
           </div>
 
@@ -200,16 +137,16 @@ export default async function SolutionDetailPage({ params }: PageProps) {
         {/* Core Technical Capabilities Checklist */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-5 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">Technical Specifications</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">{detail.specs.eyebrow}</span>
             <h2 className="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Complete Feature Capabilities Included
+              {detail.specs.title}
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Every deployment includes pre-configured integrations, audit logging, security controls, and responsive web management.
+              {detail.specs.description}
             </p>
             <div className="pt-3">
               <Button asChild size="default" className="rounded-lg">
-                <Link href="/contact?topic=sales">Talk to a Travel Architect</Link>
+                <Link href={detail.specs.cta.href}>{detail.specs.cta.label}</Link>
               </Button>
             </div>
           </div>
@@ -229,9 +166,9 @@ export default async function SolutionDetailPage({ params }: PageProps) {
         {/* Frequently Asked Questions */}
         <div className="border-t border-border/70 pt-12">
           <div className="max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">Frequently Asked Questions</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">{detail.faqLabel}</span>
             <h2 className="mt-2 font-heading text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Questions About This Solution
+              {detail.faqTitle}
             </h2>
           </div>
 
@@ -251,10 +188,7 @@ export default async function SolutionDetailPage({ params }: PageProps) {
       </Container>
 
       {/* Conversion CTA Band with Proper Spacing */}
-      <CtaBand
-        title={`Ready to deploy ${solution.title}?`}
-        description="Our engineers will configure your sandboxes, supplier adapters, and custom branding within 48 hours."
-      />
+      <CtaBand title={detail.ctaTitleTemplate.replace("{{title}}", solution.title)} description={detail.ctaDescription} />
     </>
   );
 }

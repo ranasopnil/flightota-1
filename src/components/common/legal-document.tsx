@@ -1,11 +1,12 @@
-import type { LegalSection } from "@/types/content";
+import type { LegalDocumentEntry } from "@/types/content";
 import { formatIsoDate } from "@/utils/format";
 import { Container } from "./container";
 import { ContentBlocks } from "./content-blocks";
 import { PageHero } from "./page-hero";
 import { ShareEmbedModal } from "./share-embed-modal";
 
-export function LegalDocument({ title, description, path, updatedAt, sections }: { title: string; description: string; path: string; updatedAt: string; sections: LegalSection[] }) {
+export function LegalDocument({ doc, path }: { doc: LegalDocumentEntry; path: string }) {
+  const { title, description, updatedAt, sections } = doc;
   return (
     <>
       <PageHero
@@ -13,7 +14,7 @@ export function LegalDocument({ title, description, path, updatedAt, sections }:
         badge="Binding Agreement"
         title={title}
         description={description}
-        image="/images/heroes/about_architecture.jpg"
+        image={doc.heroImage ?? "/images/heroes/about_architecture.jpg"}
         actions={
           <ShareEmbedModal
             path={path}
