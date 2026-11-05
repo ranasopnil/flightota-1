@@ -1,4 +1,6 @@
 import { Info, TriangleAlert } from "lucide-react";
+import Image from "next/image";
+import { imageSrc } from "@/lib/image-src";
 import { cn } from "@/lib/utils";
 import type { ContentBlock } from "@/types/content";
 import { CodeBlock } from "./code-block";
@@ -38,6 +40,19 @@ export function ContentBlocks({ blocks, className }: { blocks: ContentBlock[]; c
           }
           case "code":
             return <CodeBlock key={i} code={block.code} language={block.language} title={block.title} className="my-1" />;
+          case "image":
+            return (
+              <figure key={i} className="my-1">
+                {block.width && block.height ? (
+                  <Image src={imageSrc(block.src)} alt={block.alt} width={block.width} height={block.height} className="rounded-lg border" />
+                ) : (
+                  <div className="relative aspect-video overflow-hidden rounded-lg border bg-muted">
+                    <Image src={imageSrc(block.src)} alt={block.alt} fill sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
+                  </div>
+                )}
+                {block.caption && <figcaption className="mt-2 text-center text-xs text-muted-foreground">{block.caption}</figcaption>}
+              </figure>
+            );
           case "callout": {
             const Icon = block.tone === "warning" ? TriangleAlert : Info;
             return (

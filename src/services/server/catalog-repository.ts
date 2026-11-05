@@ -1,30 +1,19 @@
 import "server-only";
 
 import { cacheLife, cacheTag } from "next/cache";
-import { serverEnv } from "@/config/env";
 import { toSummary } from "@/features/marketplace/lib/catalog";
 import { categories as mockCategories, products as mockProducts } from "@/mocks/catalog";
-import type { ApiSuccess } from "@/types/api";
 import type { ApiCategory, ApiCategorySlug, ApiProduct, ApiProductSummary } from "@/types/catalog";
+import { BackendNotFoundError, backendConfigured, fetchFromBackend } from "./backend-fetch";
 
 /**
  * Server-side catalog data access for Server Components.
  *
- * When API_INTERNAL_URL is set, data is fetched from the platform backend
- * (NestJS). Otherwise the bundled mock catalog is used, so builds and
- * prerendering never depend on a running backend.
+ * When API_INTERNAL_URL is set, data is fetched from the platform backend.
+ * Otherwise the bundled mock catalog is used, so builds and prerendering
+ * never depend on a running backend.
  */
-async function fetchFromBackend<T>(path: string): Promise<T> {
-  const res = await fetch(`${serverEnv.apiInternalUrl}${path}`, { headers: { Accept: "application/json" } });
-  if (res.status === 404) throw new CatalogNotFoundError(path);
-  if (!res.ok) throw new Error(`Catalog request failed: ${res.status} ${path}`);
-  const body = (await res.json()) as ApiSuccess<T>;
-  return body.data;
-}
-
-export class CatalogNotFoundError extends Error {}
-
-const backendConfigured = () => Boolean(serverEnv.apiInternalUrl);
+export { BackendNotFoundError as CatalogNotFoundError };
 
 export async function listCategories(): Promise<ApiCategory[]> {
   "use cache";
@@ -48,7 +37,7 @@ export async function getProduct(slug: string): Promise<ApiProduct | null> {
   try {
     return await fetchFromBackend<ApiProduct>(`/catalog/products/${encodeURIComponent(slug)}`);
   } catch (error) {
-    if (error instanceof CatalogNotFoundError) return null;
+    if (error instanceof BackendNotFoundError) return null;
     throw error;
   }
 }

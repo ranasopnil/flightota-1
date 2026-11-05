@@ -4,7 +4,15 @@ export type ContentBlock =
   | { type: "paragraph"; text: string }
   | { type: "list"; items: string[]; ordered?: boolean }
   | { type: "code"; language: string; code: string; title?: string }
-  | { type: "callout"; tone: "info" | "warning"; text: string };
+  | { type: "callout"; tone: "info" | "warning"; text: string }
+  | { type: "image"; src: string; alt: string; caption?: string; width?: number; height?: number };
+
+/** Optional overrides for a page's link preview and document title. */
+export interface SeoFields {
+  title?: string;
+  description?: string;
+  image?: string;
+}
 
 export interface Article {
   slug: string;
@@ -16,6 +24,9 @@ export interface Article {
   tags: string[];
   author: { name: string; role: string };
   body: ContentBlock[];
+  /** Thumbnail on list pages. Falls back to the list page's default image. */
+  image?: string;
+  seo?: SeoFields;
 }
 
 export type BlogPost = Article & { category: "Product" | "Engineering" | "Industry" };
@@ -29,6 +40,18 @@ export interface LegalSection {
   id: string;
   title: string;
   body: ContentBlock[];
+}
+
+/** A legal document such as the terms or the privacy policy; routes are fixed per slug. */
+export interface LegalDocumentEntry {
+  slug: string;
+  title: string;
+  description: string;
+  /** ISO date (yyyy-mm-dd). */
+  updatedAt: string;
+  heroImage?: string;
+  sections: LegalSection[];
+  seo?: SeoFields;
 }
 
 /** A partner API guide. Text may use `code` and **bold** inline. */
@@ -51,3 +74,6 @@ export interface ApiGuide {
   intro: string;
   sections: ApiGuideSection[];
 }
+
+/** A guide stored by the product slug it documents. */
+export type ApiGuideEntry = ApiGuide & { slug: string; seo?: SeoFields };

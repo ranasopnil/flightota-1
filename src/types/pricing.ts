@@ -1,6 +1,7 @@
 export type BillingCycle = "monthly" | "annual";
 
-export type PlanId = "free-trial" | "pay-as-you-go" | "starter" | "growth" | "enterprise";
+/** Plan ids are free-form so the CMS can add plans; the comparison table keys on them. */
+export type PlanId = string;
 
 export interface PricingPlan {
   id: PlanId;

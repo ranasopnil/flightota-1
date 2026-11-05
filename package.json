@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "cms:seed": "tsx scripts/cms-seed.ts",
+    "cms:parity": "tsx scripts/cms-parity.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.1",
@@ -41,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.4",
     "tailwindcss": "^4",
+    "tsx": "^4",
     "typescript": "^5"
   }
 }
