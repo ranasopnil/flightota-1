@@ -4,7 +4,6 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/common/container";
-import { pageMetadata } from "@/config/share";
 import { siteConfig } from "@/config/site";
 import { ApiDetailHeader } from "@/features/api-detail/components/api-detail-header";
 import { EndpointList } from "@/features/api-detail/components/endpoint-list";
@@ -16,6 +15,8 @@ import { ApiFlowShowcase } from "@/features/api-detail/components/api-flow-showc
 import { VisaShowcase } from "@/features/api-detail/components/visa-showcase";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { getCategory, getProduct, listProducts } from "@/services/server/catalog-repository";
+import { getSingleton } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
 export async function generateStaticParams() {
   const products = await listProducts();
@@ -27,11 +28,11 @@ export async function generateMetadata({ params }: PageProps<"/apis/[slug]">): P
   const product = await getProduct(slug);
   if (!product) return { title: "API not found" };
 
-  return pageMetadata({
+  const settings = await getSingleton("site-settings");
+  return cmsPageMetadata(`/apis/${product.slug}`, {
     title: `${product.name} — ${product.features.slice(0, 3).join(", ")}`,
-    shareTitle: `${product.name} · ${siteConfig.name}`,
+    shareTitle: `${product.name} · ${settings.name}`,
     description: product.tagline,
-    path: `/apis/${product.slug}`,
   });
 }
 

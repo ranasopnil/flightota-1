@@ -4,6 +4,7 @@ import type { BlogPost } from "@/types/content";
 export const blogPosts: BlogPost[] = [
   {
     slug: "transfer-api-general-availability",
+    seo: { image: "/images/og/hero_transfer.jpg" },
     image: "/images/heroes/airlines_tarmac.jpg",
     title: "The Airport Transfer API is now generally available",
     excerpt: "Fixed-price private and shared transfers in 1,000+ airports, with flight-aware pickups. Now available in production.",
@@ -24,6 +25,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "idempotency-for-travel-bookings",
+    seo: { image: "/images/og/dev_flight.jpg" },
     image: "/images/hero/hero_hotel.jpg",
     title: "Why every booking endpoint needs an idempotency key",
     excerpt: "Network timeouts are inevitable. Here's how we make sure a retry never turns into a duplicate ticket or a double charge.",
@@ -43,6 +45,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "esim-upsell-playbook",
+    seo: { image: "/images/og/hero_esim.jpg" },
     image: "/images/hero/hero_esim.jpg",
     title: "The eSIM upsell playbook for OTAs",
     excerpt: "When to offer data plans, which plans convert best, and how to use usage webhooks to drive top-ups.",
@@ -61,6 +64,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "normalising-hotel-content",
+    seo: { image: "/images/og/hero_hotel.jpg" },
     image: "/images/categories/flight.jpg",
     title: "Normalising hotel content across suppliers",
     excerpt: "How we map duplicate properties across bed banks into a single property ID, and why it matters for conversion.",

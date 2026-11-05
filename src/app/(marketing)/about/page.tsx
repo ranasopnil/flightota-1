@@ -8,14 +8,16 @@ import { CmsPageHero } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
 import { Icon } from "@/components/common/icon-map";
 import { Section, SectionHeader } from "@/components/common/section";
-import { staticPageMetadata } from "@/config/share";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { imageSrc } from "@/lib/image-src";
 import { eyebrowToneClasses } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 import { getSingleton } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/about");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/about");
+}
 
 export default async function AboutPage() {
   const page = await getSingleton("about");

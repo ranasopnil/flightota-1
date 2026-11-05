@@ -4,6 +4,7 @@ import type { Guide } from "@/types/content";
 export const guides: Guide[] = [
   {
     slug: "quickstart",
+    seo: { image: "/images/og/get-started.jpg" },
     image: "/images/heroes/guides_planning.jpg",
     title: "Quickstart: your first call",
     excerpt: "Issue a key, whitelist your server, send two headers and call ping.",
@@ -29,6 +30,7 @@ export const guides: Guide[] = [
   },
   {
     slug: "flight-booking-flow",
+    seo: { image: "/images/og/hero_flight.jpg" },
     image: "/images/hero/hero_flight.jpg",
     title: "Build a complete flight booking flow",
     excerpt: "A booking takes five calls: search, confirm the price, read what to send, book, issue.",
@@ -51,6 +53,7 @@ export const guides: Guide[] = [
   },
   {
     slug: "b2b-sub-agent-network",
+    seo: { image: "/images/og/b2b_portal.jpg" },
     image: "/images/solutions/b2b_portal.jpg",
     title: "Launch a Multi-Tier B2B Sub-Agent Distribution Portal",
     excerpt: "Configure sub-agent hierarchies, deposit wallets, credit limits, and dynamic airline markups.",
@@ -71,6 +74,7 @@ export const guides: Guide[] = [
   },
   {
     slug: "dynamic-packaging-workflow",
+    seo: { image: "/images/og/dynamic_packaging.jpg" },
     image: "/images/solutions/dynamic_packaging.jpg",
     title: "Dynamic Packaging: Bundling Flights, Stays & Ground Transfers",
     excerpt: "Combine wholesale flights, hotels, and airport transfers into a single opaque-fare checkout.",
@@ -90,6 +94,7 @@ export const guides: Guide[] = [
   },
   {
     slug: "corporate-travel-policy-setup",
+    seo: { image: "/images/og/corporate_booking.jpg" },
     image: "/images/solutions/corporate_booking.jpg",
     title: "Enforcing Corporate Travel Policies & Approvals (CSBT)",
     excerpt: "Configure grade-based flight cabin rules, city hotel caps, and L1/L2 approval chains.",
@@ -109,6 +114,7 @@ export const guides: Guide[] = [
   },
   {
     slug: "hotel-booking-flow",
+    seo: { image: "/images/og/hero_hotel.jpg" },
     image: "/images/hero/hero_hotel.jpg",
     title: "Hotel search, rate check and booking",
     excerpt: "A stay takes five calls: find the destination, search hotels, list one hotel's rooms, re-check the chosen rate, book.",

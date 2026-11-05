@@ -4,19 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { CategoryIcon } from "@/components/common/category-icon";
-import { ShareEmbedModal } from "@/components/common/share-embed-modal";
+import { ShareButton } from "@/components/common/share-button";
 import { StatusBadge } from "@/components/common/status-badge";
 import { CodeTabs } from "@/components/documentation/code-tabs";
 import { GuideBlocks } from "@/components/documentation/guide-blocks";
-import { staticPageMetadata } from "@/config/share";
 import { siteConfig } from "@/config/site";
 import { codeLanguages, generateCodeSample } from "@/lib/code-samples";
 import { imageSrc } from "@/lib/image-src";
 import { listProductsDetailed } from "@/services/server/catalog-repository";
 import { getSingleton, listEntries } from "@/services/server/cms-repository";
 import type { ApiProduct } from "@/types/catalog";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/documentation");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/documentation");
+}
 
 function DocSection({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
@@ -93,7 +95,7 @@ export default async function DocumentationPage() {
                   {chip}
                 </span>
               ))}
-              <ShareEmbedModal
+              <ShareButton
                 path="/documentation"
                 size="sm"
                 variant="outline"

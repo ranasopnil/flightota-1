@@ -5,6 +5,7 @@ export const platformSolutions: TravelSolution[] = [
 
   {
     slug: "b2b-travel-portal",
+    seo: { image: "/images/og/b2b_portal.jpg" },
     group: "platform",
     title: "B2B Travel Agent Portal & Sub-Agent Distribution",
     tagline: "Multi-Tier B2B Travel Distribution Platform",
@@ -92,6 +93,7 @@ export const platformSolutions: TravelSolution[] = [
   },
   {
     slug: "b2c-booking-engine",
+    seo: { image: "/images/og/b2c_booking.jpg" },
     group: "platform",
     title: "Consumer Internet Booking Engine (B2C IBE)",
     tagline: "High-Conversion Web & Mobile Travel Reservation System",
@@ -179,6 +181,7 @@ export const platformSolutions: TravelSolution[] = [
   },
   {
     slug: "corporate-booking-tool",
+    seo: { image: "/images/og/corporate_booking.jpg" },
     group: "platform",
     title: "Corporate Self-Booking Tool (CSBT) for TMCs",
     tagline: "Automated Travel Policy, Approvals & Expense Tracking",
@@ -266,6 +269,7 @@ export const platformSolutions: TravelSolution[] = [
   },
   {
     slug: "dynamic-packaging-engine",
+    seo: { image: "/images/og/dynamic_packaging.jpg" },
     group: "platform",
     title: "Dynamic Packaging Engine (Flight + Hotel + Transfer)",
     tagline: "Real-Time Vacation Bundle Creation with Opaque Net Rates",
@@ -353,6 +357,7 @@ export const platformSolutions: TravelSolution[] = [
   },
   {
     slug: "hotel-extranet-crs",
+    seo: { image: "/images/og/hotel_extranet.jpg" },
     group: "platform",
     title: "Hotel Extranet & Central Reservation System (CRS)",
     tagline: "Direct Hotel Inventory, Rates & Room Allotment Management",
@@ -440,6 +445,7 @@ export const platformSolutions: TravelSolution[] = [
   },
   {
     slug: "travel-erp-backoffice",
+    seo: { image: "/images/og/travel_erp.jpg" },
     group: "platform",
     title: "Travel ERP & Mid/Back-Office Automation",
     tagline: "End-to-End Accounting, PNR Queue Management & Reconciliation",

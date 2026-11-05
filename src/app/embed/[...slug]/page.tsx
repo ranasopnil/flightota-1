@@ -5,17 +5,18 @@ import { notFound } from "next/navigation";
 import { CategoryIcon } from "@/components/common/category-icon";
 import { LogoMark } from "@/components/common/logo";
 import { StatusBadge } from "@/components/common/status-badge";
-import { getSharePage, shareImageForPath, sharePages } from "@/config/share";
 import { siteConfig } from "@/config/site";
+import { imageSrc } from "@/lib/image-src";
+import { resolvePageSeo } from "@/services/server/seo";
 import { getProduct, listProducts } from "@/services/server/catalog-repository";
-import { getEntry, listEntries } from "@/services/server/cms-repository";
+import { getEntry, getSingleton, listEntries } from "@/services/server/cms-repository";
 import { formatIsoDate } from "@/utils/format";
 
 export async function generateStaticParams() {
-  const [products, posts, guidesList, solutions] = await Promise.all([listProducts(), listEntries("blog"), listEntries("guides"), listEntries("solutions")]);
+  const [products, posts, guidesList, solutions, seo] = await Promise.all([listProducts(), listEntries("blog"), listEntries("guides"), listEntries("solutions"), getSingleton("seo")]);
 
   return [
-    ...Object.keys(sharePages).map((path) => ({ slug: path.slice(1).split("/") })),
+    ...Object.keys(seo.pages).filter((path) => path !== "/").map((path) => ({ slug: path.slice(1).split("/") })),
     ...products.flatMap((p) => [{ slug: ["apis", p.slug] }, { slug: ["documentation", p.slug] }]),
     ...solutions.map((s) => ({ slug: ["solutions", s.slug] })),
     ...posts.map((b) => ({ slug: ["blog", b.slug] })),
@@ -30,8 +31,10 @@ interface EmbedPageProps {
 
 interface EmbedCardProps {
   theme?: string;
-  /** Page URL path, used for the link target and the picture. */
+  /** Page URL path, used for the link target. */
   path: string;
+  image: string;
+  siteName: string;
   eyebrow: ReactNode;
   title: string;
   description: string;
@@ -42,7 +45,7 @@ interface EmbedCardProps {
   children?: ReactNode;
 }
 
-function EmbedCard({ theme, path, eyebrow, title, description, cta, overlay, children }: EmbedCardProps) {
+function EmbedCard({ theme, path, image, siteName, eyebrow, title, description, cta, overlay, children }: EmbedCardProps) {
   return (
     <div
       className={`w-full max-w-lg overflow-hidden rounded-lg border bg-card text-card-foreground font-sans ${
@@ -51,7 +54,7 @@ function EmbedCard({ theme, path, eyebrow, title, description, cta, overlay, chi
     >
       <div className="relative h-36 sm:h-40 w-full overflow-hidden bg-navy-950">
         <Image
-          src={shareImageForPath(path)}
+          src={imageSrc(image)}
           alt={title}
           fill
           priority
@@ -82,7 +85,7 @@ function EmbedCard({ theme, path, eyebrow, title, description, cta, overlay, chi
             className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition"
           >
             <LogoMark className="size-5" />
-            <span className="text-[11px] font-semibold text-foreground">{siteConfig.name}</span>
+            <span className="text-[11px] font-semibold text-foreground">{siteName}</span>
           </a>
 
           <a
@@ -106,15 +109,17 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
 
   const path = `/${slug.join("/")}`;
   const [type, itemSlug] = slug;
+  const [seo, settings] = await Promise.all([getSingleton("seo"), getSingleton("site-settings")]);
+  const resolved = await resolvePageSeo(path);
+  const common = { theme, path, image: resolved.image, siteName: settings.name };
 
   // Checked first: /apis/compare is a fixed page, not an API called "compare".
-  const page = getSharePage(path);
+  const page = seo.pages[path];
   if (page) {
     return (
       <EmbedCard
-        theme={theme}
-        path={path}
-        eyebrow={siteConfig.name}
+        {...common}
+        eyebrow={settings.name}
         title={page.title}
         description={page.description}
         cta="Open Page"
@@ -128,7 +133,7 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
 
     return (
       <EmbedCard
-        theme={theme}
+        {...common}
         path={`/apis/${product.slug}`}
         eyebrow={product.category}
         title={product.name}
@@ -174,7 +179,7 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
 
     return (
       <EmbedCard
-        theme={theme}
+        {...common}
         path={`/documentation/${product.slug}`}
         eyebrow="API Reference"
         title={`${product.name} reference`}
@@ -190,7 +195,7 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
 
     return (
       <EmbedCard
-        theme={theme}
+        {...common}
         path={`/solutions/${solution.slug}`}
         eyebrow={solution.eyebrow}
         title={solution.title}
@@ -206,7 +211,7 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
 
     return (
       <EmbedCard
-        theme={theme}
+        {...common}
         path={`/blog/${post.slug}`}
         eyebrow={
           <>
@@ -226,7 +231,7 @@ async function EmbedContent({ params, searchParams }: EmbedPageProps) {
 
     return (
       <EmbedCard
-        theme={theme}
+        {...common}
         path={`/guides/${guide.slug}`}
         eyebrow={`Integration Guide • ${guide.readingMinutes} min read`}
         title={guide.title}

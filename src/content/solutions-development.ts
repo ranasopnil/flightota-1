@@ -7,6 +7,7 @@ import type { TravelSolution } from "@/types/solutions";
 export const developmentSolutions: TravelSolution[] = [
   {
     slug: "b2b-travel-development-portal",
+    seo: { image: "/images/og/dev_b2b.jpg" },
     group: "development",
     title: "B2B Travel Development Portal",
     tagline: "A portal for your agents, built on one REST API",
@@ -50,6 +51,7 @@ export const developmentSolutions: TravelSolution[] = [
   },
   {
     slug: "b2c-travel-development-portal",
+    seo: { image: "/images/og/dev_b2c.jpg" },
     group: "development",
     title: "B2C Travel Development Portal",
     tagline: "A booking website for your own customers",
@@ -93,6 +95,7 @@ export const developmentSolutions: TravelSolution[] = [
   },
   {
     slug: "flight-booking-portal",
+    seo: { image: "/images/og/dev_flight.jpg" },
     group: "development",
     title: "Flight Booking Portal",
     tagline: "Search, book, ticket, refund and reissue",
@@ -136,6 +139,7 @@ export const developmentSolutions: TravelSolution[] = [
   },
   {
     slug: "hotel-booking-portal",
+    seo: { image: "/images/og/dev_hotel.jpg" },
     group: "development",
     title: "Hotel Booking Portal",
     tagline: "Find, book and cancel hotel stays worldwide",
@@ -179,6 +183,7 @@ export const developmentSolutions: TravelSolution[] = [
   },
   {
     slug: "esim-portal",
+    seo: { image: "/images/og/esim.jpg" },
     group: "development",
     title: "eSIM Selling Portal",
     tagline: "Travel eSIMs for 200+ countries and regions",
@@ -222,6 +227,7 @@ export const developmentSolutions: TravelSolution[] = [
   },
   {
     slug: "transfer-booking-portal",
+    seo: { image: "/images/og/transfers.jpg" },
     group: "development",
     title: "Airport Transfer Portal",
     tagline: "From the airport to the hotel door",

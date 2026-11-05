@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleLayout } from "@/components/common/article-layout";
-import { pageMetadata } from "@/config/share";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { getEntry, listEntries } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
 export async function generateStaticParams() {
   const posts = await listEntries("blog");
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   const { slug } = await params;
   const post = await getEntry("blog", slug);
   if (!post) return { title: "Post not found" };
-  return pageMetadata({ title: post.seo?.title ?? post.title, description: post.seo?.description ?? post.excerpt, path: `/blog/${post.slug}`, publishedTime: post.publishedAt });
+  return cmsPageMetadata(`/blog/${post.slug}`, { publishedTime: post.publishedAt });
 }
 
 export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">) {

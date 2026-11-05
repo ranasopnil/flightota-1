@@ -6,12 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CmsPageHero } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
-import { staticPageMetadata } from "@/config/share";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { imageSrc } from "@/lib/image-src";
 import { getSingleton, listEntries } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/solutions");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/solutions");
+}
 
 export default async function SolutionsPage() {
   const [page, solutions] = await Promise.all([getSingleton("solutions-page"), listEntries("solutions")]);

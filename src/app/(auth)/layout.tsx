@@ -3,19 +3,23 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Logo } from "@/components/common/logo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
-import { siteConfig } from "@/config/site";
+import { ShareProvider } from "@/components/common/share-context";
 import { getSingleton } from "@/services/server/cms-repository";
 
-export const metadata: Metadata = {
-  title: {
-    template: `%s · ${siteConfig.name}`,
-    default: `Authentication · ${siteConfig.name}`,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSingleton("site-settings");
+  return {
+    title: {
+      template: `%s · ${settings.name}`,
+      default: `Authentication · ${settings.name}`,
+    },
+  };
+}
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSingleton("site-settings");
+  const [settings, seo] = await Promise.all([getSingleton("site-settings"), getSingleton("seo")]);
   return (
+    <ShareProvider value={{ siteName: settings.name, defaultImage: seo.defaultImage, catalogImages: seo.catalogImages }}>
     <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background selection:bg-primary/20 selection:text-primary">
       {/* Ambient background glow & grid pattern */}
       <div
@@ -79,5 +83,6 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
         </div>
       </footer>
     </div>
+    </ShareProvider>
   );
 }

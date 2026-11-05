@@ -3,7 +3,7 @@ import { formatIsoDate } from "@/utils/format";
 import { Container } from "./container";
 import { ContentBlocks } from "./content-blocks";
 import { PageHero } from "./page-hero";
-import { ShareEmbedModal } from "./share-embed-modal";
+import { ShareButton } from "./share-button";
 
 export function LegalDocument({ doc, path }: { doc: LegalDocumentEntry; path: string }) {
   const { title, description, updatedAt, sections } = doc;
@@ -16,7 +16,7 @@ export function LegalDocument({ doc, path }: { doc: LegalDocumentEntry; path: st
         description={description}
         image={doc.heroImage ?? "/images/heroes/about_architecture.jpg"}
         actions={
-          <ShareEmbedModal
+          <ShareButton
             path={path}
             size="sm"
             variant="outline"

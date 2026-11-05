@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
-import { staticPageMetadata } from "@/config/share";
 import Link from "next/link";
 import { Suspense } from "react";
 import { GitCompareArrows } from "lucide-react";
 import { Container } from "@/components/common/container";
 import { PageHero } from "@/components/common/page-hero";
-import { ShareEmbedModal } from "@/components/common/share-embed-modal";
+import { ShareButton } from "@/components/common/share-button";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ComparisonTable } from "@/features/marketplace/components/comparison-table";
 import { ComparePicker } from "@/features/marketplace/components/compare-picker";
 import { getProduct, listProducts } from "@/services/server/catalog-repository";
 import type { ApiProduct } from "@/types/catalog";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/apis/compare");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/apis/compare");
+}
 
 async function Comparison({ searchParams }: { searchParams: PageProps<"/apis/compare">["searchParams"] }) {
   const params = await searchParams;
@@ -61,7 +63,7 @@ export default function ComparePage({ searchParams }: PageProps<"/apis/compare">
             <Button asChild size="sm" className="rounded-lg text-xs font-semibold h-7 ">
               <Link href="/apis">Catalog &rarr;</Link>
             </Button>
-            <ShareEmbedModal
+            <ShareButton
               path="/apis/compare"
               size="sm"
               variant="outline"

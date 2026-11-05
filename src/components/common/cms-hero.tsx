@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icon } from "@/components/common/icon-map";
 import { PageHero } from "@/components/common/page-hero";
-import { ShareEmbedModal } from "@/components/common/share-embed-modal";
+import { ShareButton } from "@/components/common/share-button";
 import { Button } from "@/components/ui/button";
 import { imageSrc } from "@/lib/image-src";
 import { cn } from "@/lib/utils";
@@ -46,7 +46,7 @@ export function HeroActions({ actions, path, share, children }: { actions: HeroA
         </Button>
       ))}
       {children}
-      {path && <ShareEmbedModal path={path} title={share?.title} description={share?.description} size="sm" variant="outline" className={heroOutlineButtonClass} />}
+      {path && <ShareButton path={path} title={share?.title} description={share?.description} size="sm" variant="outline" className={heroOutlineButtonClass} />}
     </>
   );
 }

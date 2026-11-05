@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { CmsPageHero } from "@/components/common/cms-hero";
 import { Section, SectionHeader } from "@/components/common/section";
 import { FaqJsonLd, FaqList } from "@/components/marketing/faq-list";
-import { staticPageMetadata } from "@/config/share";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { ApiPricingTable } from "@/features/pricing/components/api-pricing-table";
 import { TravelPortalSolutionsPricing } from "@/features/pricing/components/travel-portal-solutions-pricing";
@@ -12,8 +11,11 @@ import { PricingPlans } from "@/features/pricing/components/pricing-plans";
 import { listProducts } from "@/services/server/catalog-repository";
 import { getSingleton } from "@/services/server/cms-repository";
 import { formatCurrency, formatNumber } from "@/utils/format";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/pricing");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/pricing");
+}
 
 export default async function PricingPage() {
   const [page, products] = await Promise.all([getSingleton("pricing"), listProducts()]);

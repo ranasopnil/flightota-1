@@ -23,16 +23,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getSharePage, shareImageForPath } from "@/config/share";
 import { siteConfig } from "@/config/site";
+import { imageSrc } from "@/lib/image-src";
 import { cn } from "@/lib/utils";
+import { useShareDefaults } from "./share-context";
 
 interface ShareEmbedModalProps {
-  /** Defaults to the page's entry in `sharePages`. */
+  /** Defaults to the site name; server pages pass the resolved title through `ShareButton`. */
   title?: string;
   description?: string;
   path: string; // e.g. "/apis/air-travel-api" or "/blog/transfer-api-general-availability"
-  image?: string; // e.g. "/images/hero/hero_flight.jpg"
+  /** Picture of the link preview. Defaults to the product share image for the path, then the site default. */
+  image?: string;
+  siteName?: string;
   triggerLabel?: string;
   variant?: "default" | "outline" | "ghost" | "secondary";
   size?: "default" | "sm" | "lg" | "xl" | "icon";
@@ -46,6 +49,7 @@ export function ShareEmbedModal({
   description: descriptionProp,
   path,
   image,
+  siteName: siteNameProp,
   triggerLabel = "Share",
   variant = "outline",
   size = "default",
@@ -70,14 +74,15 @@ export function ShareEmbedModal({
   const embedUrl = `${origin}${embedPath}${themeParam}`;
 
   // Same title, text and picture as the page's link preview tags
-  const sharePage = getSharePage(path);
-  const title = titleProp ?? sharePage?.title ?? siteConfig.name;
-  const description = descriptionProp ?? sharePage?.description;
-  const resolvedImage = image ?? shareImageForPath(path);
+  const defaults = useShareDefaults();
+  const siteName = siteNameProp ?? defaults.siteName;
+  const title = titleProp ?? siteName;
+  const description = descriptionProp;
+  const resolvedImage = image ?? defaults.catalogImages[path.split("/").pop() ?? ""] ?? defaults.defaultImage;
 
   const resolvedFullImageUrl = `${origin}${resolvedImage}`;
 
-  const iframeSnippet = `<iframe src="${embedUrl}" width="100%" height="340" frameborder="0" style="border: 1px solid #e5e9f0; border-radius: 12px; max-width: 520px; width: 100%; display: block;" title="${title} - ${siteConfig.name}"></iframe>`;
+  const iframeSnippet = `<iframe src="${embedUrl}" width="100%" height="340" frameborder="0" style="border: 1px solid #e5e9f0; border-radius: 12px; max-width: 520px; width: 100%; display: block;" title="${title} - ${siteName}"></iframe>`;
   const markdownSnippet = `[![${title}](${resolvedFullImageUrl})](${fullUrl})`;
   const htmlImageSnippet = `<a href="${fullUrl}" target="_blank" rel="noopener noreferrer">\n  <img src="${resolvedFullImageUrl}" alt="${title}" style="max-width: 100%; border-radius: 12px; border: 1px solid #e5e9f0;" />\n</a>`;
 
@@ -198,7 +203,7 @@ export function ShareEmbedModal({
                 {/* Embedded Page Picture */}
                 <div className="relative h-36 sm:h-44 w-full overflow-hidden bg-navy-950">
                   <Image
-                    src={resolvedImage}
+                    src={imageSrc(resolvedImage)}
                     alt={title}
                     fill
                     sizes="(max-width: 640px) 100vw, 540px"

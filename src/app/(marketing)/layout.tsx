@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { ShareProvider } from "@/components/common/share-context";
 import { getSingleton } from "@/services/server/cms-repository";
 
 async function Header() {
@@ -20,9 +21,14 @@ async function Footer() {
   return <SiteFooter footer={navigation.footer} settings={settings} />;
 }
 
+async function ShareDefaults({ children }: { children: React.ReactNode }) {
+  const [settings, seo] = await Promise.all([getSingleton("site-settings"), getSingleton("seo")]);
+  return <ShareProvider value={{ siteName: settings.name, defaultImage: seo.defaultImage, catalogImages: seo.catalogImages }}>{children}</ShareProvider>;
+}
+
 export default function MarketingLayout({ children }: LayoutProps<"/">) {
   return (
-    <>
+    <ShareDefaults>
       <a
         href="#main"
         className="sr-only z-[60] rounded-md bg-primary px-3 py-2 text-primary-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
@@ -36,6 +42,6 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <Footer />
-    </>
+    </ShareDefaults>
   );
 }

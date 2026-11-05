@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { staticPageMetadata } from "@/config/share";
 import { LoginForm } from "./login-form";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/login");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/login");
+}
 
 export default function LoginPage() {
   return <LoginForm />;

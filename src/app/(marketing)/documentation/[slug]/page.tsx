@@ -4,16 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CategoryIcon } from "@/components/common/category-icon";
-import { ShareEmbedModal } from "@/components/common/share-embed-modal";
+import { ShareButton } from "@/components/common/share-button";
 import { StatusBadge } from "@/components/common/status-badge";
 import { EndpointReference, EndpointSignature } from "@/components/documentation/endpoint-reference";
 import { Button } from "@/components/ui/button";
-import { pageMetadata } from "@/config/share";
 import { siteConfig } from "@/config/site";
 import { ApiGuideView } from "@/features/documentation/components/api-guide-view";
 import { imageSrc } from "@/lib/image-src";
 import { getProduct, listProducts } from "@/services/server/catalog-repository";
 import { getEntry, getSingleton } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
 export async function generateStaticParams() {
   const products = await listProducts();
@@ -29,11 +29,7 @@ export async function generateMetadata({ params }: PageProps<"/documentation/[sl
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) return { title: "Documentation not found" };
-  return pageMetadata({
-    title: `${product.name} reference`,
-    description: await referenceDescription(product.name),
-    path: `/documentation/${product.slug}`,
-  });
+  return cmsPageMetadata(`/documentation/${product.slug}`, { title: `${product.name} reference`, description: await referenceDescription(product.name) });
 }
 
 export default async function ApiReferencePage({ params }: PageProps<"/documentation/[slug]">) {
@@ -81,7 +77,7 @@ export default async function ApiReferencePage({ params }: PageProps<"/documenta
             <Button asChild variant="outline" size="sm" className="rounded-lg border-white/20 bg-slate-900/80 hover:bg-slate-800 text-white backdrop-blur-md">
               <Link href={`/apis/${product.slug}`}>Product page</Link>
             </Button>
-            <ShareEmbedModal
+            <ShareButton
               title={`${product.name} reference`}
               description={description}
               path={`/documentation/${product.slug}`}

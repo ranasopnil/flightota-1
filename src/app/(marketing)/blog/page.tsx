@@ -4,12 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
-import { staticPageMetadata } from "@/config/share";
 import { imageSrc } from "@/lib/image-src";
 import { getSingleton, listEntries } from "@/services/server/cms-repository";
 import { formatIsoDate } from "@/utils/format";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/blog");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/blog");
+}
 
 export default async function BlogPage() {
   const [page, posts] = await Promise.all([getSingleton("blog-page"), listEntries("blog")]);

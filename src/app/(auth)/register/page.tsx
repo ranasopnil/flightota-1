@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { staticPageMetadata } from "@/config/share";
 import { RegisterForm } from "./register-form";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/register");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/register");
+}
 
 export default function RegisterPage() {
   return <RegisterForm />;

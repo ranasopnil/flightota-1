@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/config/share";
 import { siteConfig } from "@/config/site";
 import { ApiCategories } from "@/features/marketing/sections/api-categories";
 import { CorporateAndMidOffice } from "@/features/marketing/sections/corporate-and-mid-office";
@@ -17,13 +16,11 @@ import { Testimonials } from "@/features/marketing/sections/testimonials";
 import { TravelSolutions } from "@/features/marketing/sections/travel-solutions";
 import { getProduct, listCategories, listProducts } from "@/services/server/catalog-repository";
 import { getSingleton } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: `${siteConfig.name} — ${siteConfig.tagline}`,
-  absoluteTitle: true,
-  description: siteConfig.description,
-  path: "/",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/");
+}
 
 export default async function HomePage() {
   const [home, pricing, categories, products, air] = await Promise.all([

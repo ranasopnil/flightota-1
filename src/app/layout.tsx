@@ -5,45 +5,42 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { NavigationLoader } from "@/components/layout/navigation-loader";
 import { ScrollToTop } from "@/components/common/scroll-to-top";
-import { DEFAULT_SHARE_IMAGE } from "@/config/share";
 import { siteConfig } from "@/config/site";
+import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from "@/lib/seo";
+import { getSingleton } from "@/services/server/cms-repository";
 import { StoreProvider } from "@/redux/store-provider";
 import "./globals.css";
 
 const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"], display: "swap" });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: `${siteConfig.name} — Travel APIs for flights, hotels, eSIM, visa & transfers`,
-    template: `%s · ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  applicationName: siteConfig.name,
-  keywords: ["travel API", "flight API", "hotel API", "eSIM API", "visa API", "transfer API", "NDC", "GDS", "OTA"],
-  openGraph: {
-    type: "website",
-    siteName: siteConfig.name,
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    images: [
-      {
-        url: DEFAULT_SHARE_IMAGE,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [DEFAULT_SHARE_IMAGE],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const [settings, seo] = await Promise.all([getSingleton("site-settings"), getSingleton("seo")]);
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: {
+      default: `${settings.name} — Travel APIs for flights, hotels, eSIM, visa & transfers`,
+      template: `%s · ${settings.name}`,
+    },
+    description: settings.description,
+    applicationName: settings.name,
+    keywords: settings.keywords,
+    openGraph: {
+      type: "website",
+      siteName: settings.name,
+      title: `${settings.name} — ${settings.tagline}`,
+      description: settings.description,
+      url: siteConfig.url,
+      images: [{ url: seo.defaultImage, width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT, alt: settings.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: settings.name,
+      description: settings.description,
+      images: [seo.defaultImage],
+    },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",

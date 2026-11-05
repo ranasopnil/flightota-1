@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LegalDocument } from "@/components/common/legal-document";
-import { staticPageMetadata } from "@/config/share";
 import { getEntry } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/terms");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/terms");
+}
 
 export default async function TermsPage() {
   const doc = await getEntry("legal", "terms");

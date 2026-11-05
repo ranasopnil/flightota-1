@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { staticPageMetadata } from "@/config/share";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -17,7 +16,7 @@ import {
   Plane,
 } from "lucide-react";
 import { Container } from "@/components/common/container";
-import { ShareEmbedModal } from "@/components/common/share-embed-modal";
+import { ShareButton } from "@/components/common/share-button";
 import { Button } from "@/components/ui/button";
 import { CategorySwiper } from "@/components/marketplace/category-swiper";
 import { DeveloperExperience } from "@/features/marketing/sections/developer-experience";
@@ -28,8 +27,11 @@ import { catalogQueryToSearch, parseCatalogQuery } from "@/features/marketplace/
 import { listCategories, listProducts, listProductsDetailed } from "@/services/server/catalog-repository";
 import { getSingleton } from "@/services/server/cms-repository";
 import { siteConfig } from "@/config/site";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/apis");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/apis");
+}
 
 async function Explorer({ searchParams }: { searchParams: PageProps<"/apis">["searchParams"] }) {
   const [products, categories, params] = await Promise.all([listProducts(), listCategories(), searchParams]);
@@ -122,7 +124,7 @@ export default async function MarketplacePage({ searchParams }: PageProps<"/apis
                     API Docs &rarr;
                   </Link>
                 </Button>
-                <ShareEmbedModal
+                <ShareButton
                   path="/apis"
                   size="sm"
                   variant="outline"

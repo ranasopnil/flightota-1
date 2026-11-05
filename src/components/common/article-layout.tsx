@@ -2,7 +2,7 @@ import { ArrowLeft, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ShareEmbedModal } from "@/components/common/share-embed-modal";
+import { ShareButton } from "@/components/common/share-button";
 import type { Article } from "@/types/content";
 import { formatIsoDate } from "@/utils/format";
 import { Container } from "./container";
@@ -53,7 +53,7 @@ export function ArticleLayout({ article, eyebrow, backHref, backLabel, meta }: A
               </span>
               {meta}
             </div>
-            <ShareEmbedModal
+            <ShareButton
               title={article.title}
               description={article.excerpt}
               path={article.slug ? `${backHref}/${article.slug}` : backHref}

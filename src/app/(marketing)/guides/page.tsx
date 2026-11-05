@@ -4,13 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
-import { staticPageMetadata } from "@/config/share";
 import { imageSrc } from "@/lib/image-src";
 import { cn } from "@/lib/utils";
 import { getSingleton, listEntries } from "@/services/server/cms-repository";
 import type { Guide } from "@/types/content";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/guides");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/guides");
+}
 
 const levelStyles: Record<Guide["level"], string> = {
   Beginner: "bg-sea-50 text-sea-700 dark:bg-sea-900/40 dark:text-sea-200",

@@ -5,7 +5,6 @@ import { Activity, CheckCircle2 } from "lucide-react";
 import { CmsPageHero } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
 import { Icon } from "@/components/common/icon-map";
-import { staticPageMetadata } from "@/config/share";
 import { AirlinesExplorer } from "@/features/airlines/components/airlines-explorer";
 import { AirlineRouteSimulator } from "@/features/airlines/components/airline-route-simulator";
 import { NdcComparisonMatrix } from "@/features/airlines/components/ndc-comparison-matrix";
@@ -15,8 +14,11 @@ import { imageSrc } from "@/lib/image-src";
 import { hoverBorderToneClasses, iconToneClasses, valueToneClasses } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 import { getSingleton, listEntries } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/airlines");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/airlines");
+}
 
 export default async function AirlinesPage() {
   const [page, airlines] = await Promise.all([getSingleton("airlines-page"), listEntries("airlines")]);

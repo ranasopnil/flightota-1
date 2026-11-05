@@ -7,11 +7,11 @@ import { HeroActions } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
 import { Icon } from "@/components/common/icon-map";
 import { PageHero } from "@/components/common/page-hero";
-import { pageMetadata } from "@/config/share";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { TravelErpShowcase } from "@/features/solutions/components/travel-erp-showcase";
 import { imageSrc } from "@/lib/image-src";
 import { getEntry, getSingleton, listEntries } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const solution = await getEntry("solutions", slug);
   if (!solution) return {};
 
-  return pageMetadata({ title: solution.seo?.title ?? solution.title, description: solution.seo?.description ?? solution.description, path: `/solutions/${slug}` });
+  return cmsPageMetadata(`/solutions/${slug}`);
 }
 
 export default async function SolutionDetailPage({ params }: PageProps) {

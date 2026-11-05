@@ -4,12 +4,14 @@ import { CmsPageHero } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
 import { Icon } from "@/components/common/icon-map";
 import { Skeleton } from "@/components/ui/skeleton";
-import { staticPageMetadata } from "@/config/share";
 import { ContactForm } from "@/features/marketing/components/contact-form";
 import { contactTopics, type ContactTopic } from "@/lib/validations/leads";
 import { getSingleton } from "@/services/server/cms-repository";
+import { cmsPageMetadata } from "@/services/server/seo";
 
-export const metadata: Metadata = staticPageMetadata("/contact");
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("/contact");
+}
 
 async function Form({ searchParams }: { searchParams: PageProps<"/contact">["searchParams"] }) {
   const { topic } = await searchParams;
