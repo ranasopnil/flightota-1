@@ -3,93 +3,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { imageSrc } from "@/lib/image-src";
+import { badgeToneClasses } from "@/lib/tones";
 import { cn } from "@/lib/utils";
+import type { PortalPackage, SectionCopy } from "@/types/pages";
 
-const portalPackages = [
-  {
-    id: "b2b-package",
-    title: "B2B Sub-Agent Portal",
-    tagline: "For Wholesalers, Consolidators & Travel Agencies",
-    price: "$399",
-    period: "/ month",
-    badge: "Most Popular for Agents",
-    badgeClass: "bg-sky-500/20 text-sky-300 border-sky-500/40",
-    image: "/images/solutions/b2b_portal.jpg",
-    features: [
-      "Unlimited sub-agent accounts with tiered markups",
-      "Real-time B2B deposit wallet & credit limit system",
-      "Instant PNR issuance with custom agent vouchers",
-      "Multi-currency ledger & automated commission tracking",
-      "Pre-integrated 700+ Airlines & 1.2M+ Hotels",
-    ],
-    cta: { label: "Get B2B Portal Demo", href: "/contact?topic=sales" },
-  },
-  {
-    id: "b2c-package",
-    title: "B2C Booking Engine",
-    tagline: "For New OTAs & Consumer Travel Startups",
-    price: "$499",
-    period: "/ month",
-    badge: "High Conversion",
-    badgeClass: "bg-rose-500/20 text-rose-300 border-rose-500/40",
-    image: "/images/solutions/b2c_booking.jpg",
-    features: [
-      "Responsive flight, hotel & package booking engine",
-      "Integrated payment gateways (SSLCommerz, bKash, Cards)",
-      "Automated e-ticketing & WhatsApp / SMS confirmations",
-      "Live fare calendar & interactive seat map selection",
-      "Customer self-service portal for date changes & refunds",
-    ],
-    cta: { label: "Launch B2C Portal", href: "/contact?topic=sales" },
-  },
-  {
-    id: "csbt-package",
-    title: "Corporate Self-Booking Tool",
-    tagline: "For TMCs & Enterprise Business Travel",
-    price: "$599",
-    period: "/ month",
-    badge: "Policy Compliance",
-    badgeClass: "bg-indigo-500/20 text-indigo-300 border-indigo-500/40",
-    image: "/images/solutions/corporate_booking.jpg",
-    features: [
-      "Automated travel policy validation & grade cabin caps",
-      "Multi-level L1 / L2 manager approval email & SMS workflows",
-      "Department cost centers & centralized ghost credit cards",
-      "Duty of care traveler tracking & CO2 carbon reporting",
-      "Dedicated corporate negotiated airline net fares",
-    ],
-    cta: { label: "Demo CSBT Engine", href: "/contact?topic=sales" },
-  },
-  {
-    id: "white-label-package",
-    title: "Enterprise White-Label ERP",
-    tagline: "For Consolidators, DMCs & Corporate Travel",
-    price: "Custom",
-    period: "Enterprise SLA",
-    badge: "Full Extranet & CRS",
-    badgeClass: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
-    image: "/images/solutions/travel_erp.jpg",
-    features: [
-      "Central Reservation System (CRS) for direct contracts",
-      "Dynamic Packaging Engine (Flight + Hotel combo)",
-      "Supplier extranet for hotel rate loading & allotments",
-      "PNR queue management & ticketing time-limit automation",
-      "Dedicated account manager & 99.99% uptime SLA",
-    ],
-    cta: { label: "Talk to Solutions Architect", href: "/contact?topic=enterprise" },
-  },
-];
-
-export function TravelPortalSolutionsPricing() {
+export function TravelPortalSolutionsPricing({ packages: portalPackages, header }: { packages: PortalPackage[]; header: SectionCopy }) {
   return (
     <div className="space-y-8">
       <div className="max-w-2xl">
-        <span className="text-xs font-bold uppercase tracking-wider text-primary">Platform Licensing</span>
+        <span className="text-xs font-bold uppercase tracking-wider text-primary">{header.eyebrow}</span>
         <h2 className="mt-2 font-heading text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-          Ready-to-Deploy B2B Portals, B2C Engines & Travel ERP
+          {header.title}
         </h2>
         <p className="mt-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
-          In addition to developer APIs, we provide complete software solutions inspired by global travel technology standards. Launch under your own brand without building from scratch.
+          {header.description}
         </p>
       </div>
 
@@ -102,7 +30,7 @@ export function TravelPortalSolutionsPricing() {
             {/* Image Header */}
             <div className="relative h-44 w-full overflow-hidden">
               <Image
-                src={pkg.image}
+                src={imageSrc(pkg.image)}
                 alt={pkg.title}
                 fill
                 sizes="(max-width: 1024px) 100vw, 33vw"
@@ -110,7 +38,7 @@ export function TravelPortalSolutionsPricing() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               <div className="absolute top-3 left-3">
-                <Badge className={cn("font-semibold text-xs border", pkg.badgeClass)}>
+                <Badge className={cn("font-semibold text-xs border", badgeToneClasses[pkg.badgeTone])}>
                   {pkg.badge}
                 </Badge>
               </div>
@@ -139,7 +67,7 @@ export function TravelPortalSolutionsPricing() {
               </div>
 
               <div className="mt-6 pt-4 border-t">
-                <Button asChild className="w-full rounded-lg gap-1.5" variant={pkg.id === "b2b-package" ? "default" : "outline"}>
+                <Button asChild className="w-full rounded-lg gap-1.5" variant={pkg.featured ? "default" : "outline"}>
                   <Link href={pkg.cta.href}>
                     <span>{pkg.cta.label}</span>
                     <ArrowRight className="size-3.5" />

@@ -26,6 +26,7 @@ import { MarketplaceExplorer } from "@/features/marketplace/components/marketpla
 import { MarketplaceSkeleton } from "@/features/marketplace/components/marketplace-skeleton";
 import { catalogQueryToSearch, parseCatalogQuery } from "@/features/marketplace/lib/catalog";
 import { listCategories, listProducts, listProductsDetailed } from "@/services/server/catalog-repository";
+import { getSingleton } from "@/services/server/cms-repository";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = staticPageMetadata("/apis");
@@ -45,9 +46,10 @@ async function Explorer({ searchParams }: { searchParams: PageProps<"/apis">["se
 }
 
 export default async function MarketplacePage({ searchParams }: PageProps<"/apis">) {
-  const [categories, detailedProducts] = await Promise.all([
+  const [categories, detailedProducts, home] = await Promise.all([
     listCategories(),
     listProductsDetailed(),
+      getSingleton("home"),
   ]);
 
   const flights = detailedProducts.find((p) => p.slug === "air-travel-api");
@@ -297,7 +299,7 @@ export default async function MarketplacePage({ searchParams }: PageProps<"/apis
 
       {/* 5. Live Interactive Developer Code Sandbox Playground */}
       {sampleEndpoint && (
-        <DeveloperExperience endpoint={sampleEndpoint} baseUrl={flights?.access?.sandboxUrl ?? siteConfig.sandboxUrl} access={flights?.access} />
+        <DeveloperExperience endpoint={sampleEndpoint} baseUrl={flights?.access?.sandboxUrl ?? siteConfig.sandboxUrl} access={flights?.access} content={home.developerExperience} />
       )}
 
       {/* 6. Instant Sandbox CTA Band */}

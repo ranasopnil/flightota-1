@@ -1,15 +1,23 @@
 import { Suspense } from "react";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { listProducts } from "@/services/server/catalog-repository";
+import { getSingleton } from "@/services/server/cms-repository";
 
 async function Header() {
-  const products = await listProducts();
+  const [navigation, settings] = await Promise.all([getSingleton("navigation"), getSingleton("site-settings")]);
   return (
     <SiteHeader
-      products={products.map(({ slug, name, category, tagline, status }) => ({ slug, name, category, tagline, status }))}
+      header={navigation.header}
+      topBar={navigation.topBar}
+      mobileTabs={navigation.mobileTabs}
+      settings={{ supportEmail: settings.supportEmail, phone: settings.phone, phoneHref: settings.phoneHref, social: settings.social }}
     />
   );
+}
+
+async function Footer() {
+  const [navigation, settings] = await Promise.all([getSingleton("navigation"), getSingleton("site-settings")]);
+  return <SiteFooter footer={navigation.footer} settings={settings} />;
 }
 
 export default function MarketingLayout({ children }: LayoutProps<"/">) {
@@ -27,7 +35,7 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
       <main id="main" className="flex-1 pb-16 lg:pb-0">
         {children}
       </main>
-      <SiteFooter />
+      <Footer />
     </>
   );
 }

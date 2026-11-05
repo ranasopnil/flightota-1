@@ -1,18 +1,18 @@
 import { Container } from "@/components/common/container";
 import { Eyebrow } from "@/components/common/section";
-import { platformStats } from "@/constants/marketing";
+import type { HomePageContent } from "@/types/pages";
 
-export function PlatformStats({ endpointCount }: { endpointCount: number }) {
-  const stats = [...platformStats.slice(0, 1), { value: `${endpointCount}+`, label: "Documented endpoints" }, ...platformStats.slice(1)];
+export function PlatformStats({ endpointCount, content }: { endpointCount: number; content: HomePageContent["stats"] }) {
+  const stats = [...content.items.slice(0, 1), { value: `${endpointCount}+`, label: content.endpointsLabel }, ...content.items.slice(1)];
   return (
     <section aria-labelledby="stats-heading" className="relative overflow-hidden bg-navy-950 py-7 sm:py-20 text-white">
       <div aria-hidden className="bg-grid-light absolute inset-0 opacity-70" />
       <div aria-hidden className="absolute -top-32 left-1/3 h-80 w-[600px] rounded-full bg-[radial-gradient(closest-side,rgb(220_14_24/0.28),transparent)]" />
       <Container className="relative">
         <div className="flex flex-col items-center text-center">
-          <Eyebrow tone="dark">Platform statistics</Eyebrow>
+          <Eyebrow tone="dark">{content.header.eyebrow}</Eyebrow>
           <h2 id="stats-heading" className="mt-3 max-w-2xl font-heading text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Built to carry production travel traffic
+            {content.header.title}
           </h2>
         </div>
         <dl className="mt-4 sm:mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-white/10 md:grid-cols-5">

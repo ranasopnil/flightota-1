@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Logo } from "@/components/common/logo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { siteConfig } from "@/config/site";
+import { getSingleton } from "@/services/server/cms-repository";
 
 export const metadata: Metadata = {
   title: {
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSingleton("site-settings");
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background selection:bg-primary/20 selection:text-primary">
       {/* Ambient background glow & grid pattern */}
@@ -62,7 +64,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/40 py-4 text-center text-xs text-muted-foreground">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-3 sm:flex-row sm:px-6">
-          <p>© 2026 {siteConfig.name}. All rights reserved.</p>
+          <p>© {settings.copyrightYear} {settings.name}. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-foreground transition-colors">
               Privacy Policy

@@ -9,12 +9,12 @@ import {
   ChevronDown,
   ArrowRight,
   Check,
-  Plane,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import { Container } from "@/components/common/container";
-import { siteConfig } from "@/config/site";
+import { Icon } from "@/components/common/icon-map";
+import type { NavigationContent, TopBarSettings } from "@/types/pages";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,37 +24,8 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 
-const ANNOUNCEMENTS = [
-  {
-    id: "flights",
-    badge: "Flights API",
-    text: "Search, book, ticket, refund and reissue from your deposit",
-    href: "/apis/air-travel-api",
-  },
-  {
-    id: "esim",
-    badge: "eSIM API",
-    text: "Travel eSIMs for 200+ countries and regions, issued at once",
-    href: "/apis/esim-api",
-  },
-  {
-    id: "transfers",
-    badge: "Transfers API",
-    text: "Private cars, vans and shuttles, confirmed in seconds",
-    href: "/apis/airport-transfer-api",
-  },
-];
-
-const CURRENCIES = [
-  { code: "USD", symbol: "$", name: "US Dollar", flag: "🇺🇸" },
-  { code: "BDT", symbol: "৳", name: "Bangladeshi Taka", flag: "🇧🇩" },
-  { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
-  { code: "GBP", symbol: "£", name: "British Pound", flag: "🇬🇧" },
-  { code: "AED", symbol: "د.إ", name: "UAE Dirham", flag: "🇦🇪" },
-  { code: "SGD", symbol: "S$", name: "Singapore Dollar", flag: "🇸🇬" },
-];
-
-export function TopHeader() {
+export function TopHeader({ content, settings }: { content: NavigationContent["topBar"]; settings: TopBarSettings }) {
+  const { announcements, currencies, quickLinks } = content;
   const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -80,19 +51,19 @@ export function TopHeader() {
   );
 
   const selectedCurrency = useMemo(() => {
-    return CURRENCIES.find((c) => c.code === currencyCode) ?? CURRENCIES[0];
-  }, [currencyCode]);
+    return currencies.find((c) => c.code === currencyCode) ?? currencies[0];
+  }, [currencyCode, currencies]);
 
   // Announcement rotator timer
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
-      setCurrentAnnouncementIndex((prev) => (prev + 1) % ANNOUNCEMENTS.length);
+      setCurrentAnnouncementIndex((prev) => (prev + 1) % Math.max(1, announcements.length));
     }, 4500);
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, announcements.length]);
 
-  const handleCurrencyChange = (curr: typeof CURRENCIES[0]) => {
+  const handleCurrencyChange = (curr: (typeof currencies)[number]) => {
     try {
       localStorage.setItem("flightota_preferred_currency", curr.code);
       window.dispatchEvent(new Event("currency-change"));
@@ -102,7 +73,7 @@ export function TopHeader() {
     toast.success(`Currency set to ${curr.code} (${curr.symbol})`);
   };
 
-  const currentAnnouncement = ANNOUNCEMENTS[currentAnnouncementIndex];
+  const currentAnnouncement = announcements[currentAnnouncementIndex % Math.max(1, announcements.length)];
 
   return (
     <div className="relative z-50 hidden border-b border-border/60 bg-[#091326] md:block dark:bg-[#050a14] py-1 text-[11px] sm:text-xs text-slate-300 transition-colors ">
@@ -114,28 +85,28 @@ export function TopHeader() {
         <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
           {/* Support Email */}
           <a
-            href={`mailto:${siteConfig.supportEmail}`}
+            href={`mailto:${settings.supportEmail}`}
             className="inline-flex items-center gap-1.5 font-medium text-slate-200 hover:text-white transition-colors group"
             aria-label="Email support"
           >
             <span className="flex size-4 items-center justify-center rounded-full bg-primary/20 text-primary group-hover:bg-primary/30 transition-colors">
               <Mail className="size-2.5" />
             </span>
-            <span className="truncate max-w-[125px] sm:max-w-none">{siteConfig.supportEmail}</span>
+            <span className="truncate max-w-[125px] sm:max-w-none">{settings.supportEmail}</span>
           </a>
 
           <span className="text-white/20 hidden sm:inline">•</span>
 
           {/* Hotline / Telephone */}
           <a
-            href="tel:+8801700000000"
+            href={settings.phoneHref}
             className="hidden sm:inline-flex items-center gap-1.5 font-medium text-slate-200 hover:text-white transition-colors group"
             aria-label="Direct support line"
           >
             <span className="flex size-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/30 transition-colors">
               <Phone className="size-2.5" />
             </span>
-            <span>+880 1700-000000</span>
+            <span>{settings.phone}</span>
           </a>
         </div>
 
@@ -145,6 +116,7 @@ export function TopHeader() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
+          {currentAnnouncement && (
           <AnimatePresence mode="wait">
             <motion.div
               key={currentAnnouncement.id}
@@ -166,27 +138,24 @@ export function TopHeader() {
               </Link>
             </motion.div>
           </AnimatePresence>
+          )}
         </div>
 
         {/* Right: Operational Status, Currency Selector, Utilities & Socials */}
         <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
         
-          {/* Airlines Quick Link with Tab Support */}
-          <Link
-            href="/airlines"
-            className="hidden sm:inline-flex items-center gap-1 text-slate-300 hover:text-white transition-colors font-medium text-[11px]"
-          >
-            <Plane className="size-3 text-primary" />
-            <span>Airlines</span>
-          </Link>
-
-          {/* Guides / Docs */}
-          <Link
-            href="/documentation"
-            className="hidden md:inline text-slate-300 hover:text-white transition-colors font-medium text-[11px]"
-          >
-            Docs
-          </Link>
+          {quickLinks.map((link) =>
+            link.icon ? (
+              <Link key={link.href} href={link.href} className="hidden sm:inline-flex items-center gap-1 text-slate-300 hover:text-white transition-colors font-medium text-[11px]">
+                <Icon name={link.icon} className="size-3 text-primary" />
+                <span>{link.label}</span>
+              </Link>
+            ) : (
+              <Link key={link.href} href={link.href} className="hidden md:inline text-slate-300 hover:text-white transition-colors font-medium text-[11px]">
+                {link.label}
+              </Link>
+            ),
+          )}
 
           <span className="text-white/20 hidden sm:inline">•</span>
 
@@ -213,7 +182,7 @@ export function TopHeader() {
                 Display Currency
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="my-1 border-border/50" />
-              {CURRENCIES.map((curr) => (
+              {currencies.map((curr) => (
                 <DropdownMenuItem
                   key={curr.code}
                   onClick={() => handleCurrencyChange(curr)}
@@ -235,7 +204,7 @@ export function TopHeader() {
           {/* Social Icons (GitHub, X, LinkedIn) */}
           <div className="hidden sm:flex items-center gap-1.5 pl-0.5">
             <a
-              href={siteConfig.social.github}
+              href={settings.social.github}
               target="_blank"
               rel="noreferrer"
               className="text-slate-400 hover:text-white transition-colors p-1 rounded-md hover:bg-white/10"
@@ -246,7 +215,7 @@ export function TopHeader() {
               </svg>
             </a>
             <a
-              href={siteConfig.social.x}
+              href={settings.social.x}
               target="_blank"
               rel="noreferrer"
               className="text-slate-400 hover:text-white transition-colors p-1 rounded-md hover:bg-white/10"
@@ -257,7 +226,7 @@ export function TopHeader() {
               </svg>
             </a>
             <a
-              href={siteConfig.social.linkedin}
+              href={settings.social.linkedin}
               target="_blank"
               rel="noreferrer"
               className="text-slate-400 hover:text-white transition-colors p-1 rounded-md hover:bg-white/10"

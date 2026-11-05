@@ -1,22 +1,22 @@
 "use client";
 
-import { BookOpen, Home, Layers, Menu, Plane } from "lucide-react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Icon } from "@/components/common/icon-map";
 import { cn } from "@/lib/utils";
-
-const tabs = [
-  { label: "Home", href: "/", icon: Home, active: (path: string) => path === "/" },
-  { label: "APIs", href: "/apis", icon: Layers, active: (path: string) => path.startsWith("/apis") },
-  { label: "Docs", href: "/documentation", icon: BookOpen, active: (path: string) => path.startsWith("/documentation") || path.startsWith("/guides") },
-  { label: "Airlines", href: "/airlines", icon: Plane, active: (path: string) => path.startsWith("/airlines") },
-];
+import type { MobileTab } from "@/types/pages";
 
 const tabClass = "flex h-16 min-w-0 flex-col items-center justify-center gap-1 px-0 touch-manipulation select-none transition-colors";
 
+export function isTabActive(tab: MobileTab, pathname: string) {
+  if (tab.exact) return pathname === tab.href;
+  return pathname.startsWith(tab.href) || (tab.prefixes ?? []).some((p) => pathname.startsWith(p));
+}
+
 /** The app-style tab bar on phones and tablets. "More" opens the full menu. */
-export function MobileBottomNav({ onOpenMenu, className }: { onOpenMenu?: () => void; className?: string }) {
+export function MobileBottomNav({ tabs, onOpenMenu, className }: { tabs: MobileTab[]; onOpenMenu?: () => void; className?: string }) {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
@@ -52,11 +52,10 @@ export function MobileBottomNav({ onOpenMenu, className }: { onOpenMenu?: () => 
       )}
     >
       {tabs.map((tab) => {
-        const Icon = tab.icon;
-        const active = tab.active(pathname);
+        const active = isTabActive(tab, pathname);
         return (
           <Link key={tab.href} href={tab.href} aria-current={active ? "page" : undefined} className={cn(tabClass, active ? "font-semibold text-primary" : "text-muted-foreground")}>
-            <Icon className={cn("size-5", active ? "stroke-[2.3]" : "stroke-[1.8]")} aria-hidden />
+            <Icon name={tab.icon} className={cn("size-5", active ? "stroke-[2.3]" : "stroke-[1.8]")} />
             <span className="text-[11px] leading-none">{tab.label}</span>
           </Link>
         );

@@ -6,13 +6,13 @@ import { useState } from "react";
 import { PricingCard } from "@/components/marketing/pricing-card";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { ANNUAL_DISCOUNT_LABEL } from "@/constants/pricing";
 import type { BillingCycle, PricingPlan } from "@/types/pricing";
 
-export function PricingPlans({ plans }: { plans: PricingPlan[] }) {
+export function PricingPlans({ plans, annualDiscountLabel, enterpriseNote }: { plans: PricingPlan[]; annualDiscountLabel: string; enterpriseNote: string }) {
   const [cycle, setCycle] = useState<BillingCycle>("monthly");
-  const selfServe = plans.filter((p) => p.id !== "enterprise");
-  const enterprise = plans.find((p) => p.id === "enterprise");
+  const isEnterprise = (p: PricingPlan) => p.monthlyPrice === null && p.annualMonthlyPrice === null;
+  const selfServe = plans.filter((p) => !isEnterprise(p));
+  const enterprise = plans.find(isEnterprise);
 
   return (
     <div>
@@ -30,7 +30,7 @@ export function PricingPlans({ plans }: { plans: PricingPlan[] }) {
           </ToggleGroupItem>
           <ToggleGroupItem value="annual" className="rounded-full px-5 data-[state=on]:bg-navy-900 data-[state=on]:text-white">
             Annual
-            <span className="ml-1.5 rounded-full bg-sea-100 px-1.5 py-0.5 text-[10px] font-semibold text-sea-800">{ANNUAL_DISCOUNT_LABEL}</span>
+            <span className="ml-1.5 rounded-full bg-sea-100 px-1.5 py-0.5 text-[10px] font-semibold text-sea-800">{annualDiscountLabel}</span>
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
@@ -51,7 +51,7 @@ export function PricingPlans({ plans }: { plans: PricingPlan[] }) {
               </span>
               <div>
                 <h3 className="font-heading text-xl font-semibold">{enterprise.name}</h3>
-                <p className="mt-1 max-w-xl text-navy-200">{enterprise.description} Volume pricing, custom markup and supplier-level controls.</p>
+                <p className="mt-1 max-w-xl text-navy-200">{enterprise.description} {enterpriseNote}</p>
                 <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-navy-200">
                   {enterprise.features.map((f) => (
                     <li key={f}>· {f}</li>

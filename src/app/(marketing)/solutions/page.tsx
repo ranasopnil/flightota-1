@@ -87,7 +87,7 @@ export default async function SolutionsPage() {
         </div>
       </Container>
 
-      <CtaBand title={page.cta.title} description={page.cta.description} />
+      <CtaBand cta={page.cta} />
     </>
   );
 }

@@ -83,6 +83,9 @@ export interface SiteSettings {
   defaultCta: CtaContent;
 }
 
+/** The slice of the settings the client-side header needs. */
+export type TopBarSettings = Pick<SiteSettings, "supportEmail" | "phone" | "phoneHref" | "social">;
+
 /* ---------- navigation ---------- */
 
 export interface NavItem {

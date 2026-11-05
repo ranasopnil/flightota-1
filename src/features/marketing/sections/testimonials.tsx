@@ -1,7 +1,7 @@
 import { Quote } from "lucide-react";
 import { Reveal } from "@/components/common/reveal";
 import { Section, SectionHeader } from "@/components/common/section";
-import { testimonials } from "@/constants/marketing";
+import type { HomePageContent } from "@/types/pages";
 
 function initials(name: string) {
   return name
@@ -11,10 +11,11 @@ function initials(name: string) {
     .slice(0, 2);
 }
 
-export function Testimonials() {
+export function Testimonials({ content }: { content: HomePageContent["testimonials"] }) {
+  const testimonials = content.items;
   return (
     <Section id="testimonials">
-      <SectionHeader eyebrow="Customers" title="Travel companies ship faster with FlightOTA" />
+      <SectionHeader eyebrow={content.header.eyebrow} title={content.header.title} description={content.header.description} />
       <div className="app-rail mt-4 sm:mt-12 grid gap-4 sm:gap-6 md:grid-cols-3">
         {testimonials.map((t, i) => (
           <Reveal key={t.name} delay={i * 0.06} className="h-full">

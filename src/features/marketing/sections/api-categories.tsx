@@ -4,16 +4,15 @@ import Link from "next/link";
 import { Reveal } from "@/components/common/reveal";
 import { Section, SectionHeader } from "@/components/common/section";
 import { CategoryCard } from "@/components/marketplace/category-card";
+import { imageSrc } from "@/lib/image-src";
 import type { ApiCategory, ApiProductSummary } from "@/types/catalog";
+import type { HomePageContent } from "@/types/pages";
 
-export function ApiCategories({ categories, products }: { categories: ApiCategory[]; products: ApiProductSummary[] }) {
+export function ApiCategories({ categories, products, content }: { categories: ApiCategory[]; products: ApiProductSummary[]; content: HomePageContent["categories"] }) {
+  const { browseCard } = content;
   return (
     <Section id="categories">
-      <SectionHeader
-        eyebrow="API categories"
-        title="Everything a traveller books, behind one gateway"
-        description="Seven product lines, each with its own guide, endpoints and examples."
-      />
+      <SectionHeader eyebrow={content.header.eyebrow} title={content.header.title} description={content.header.description} />
       <div className="app-rail mt-4 grid gap-3 sm:mt-12 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {categories.map((category, i) => {
           const inCategory = products.filter((p) => p.category === category.slug);
@@ -30,8 +29,8 @@ export function ApiCategories({ categories, products }: { categories: ApiCategor
             className="group relative flex h-full min-h-48 flex-col justify-between overflow-hidden rounded-lg border border-border/80 bg-navy-950 p-5 text-white transition hover:border-primary/40 "
           >
             <Image
-              src="/images/categories/flight.jpg"
-              alt="Browse the marketplace"
+              src={imageSrc(browseCard.image)}
+              alt={browseCard.title}
               fill
               sizes="(max-width: 640px) 100vw, 300px"
               className="object-cover object-center opacity-30 brightness-75 contrast-125 transition-transform duration-500 group-hover:scale-105"
@@ -39,15 +38,15 @@ export function ApiCategories({ categories, products }: { categories: ApiCategor
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
             <div className="relative z-10">
               <span className="font-mono text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded">
-                Full Catalog
+                {browseCard.badge}
               </span>
-              <h3 className="mt-2.5 font-heading text-base font-bold text-white">Browse the marketplace</h3>
+              <h3 className="mt-2.5 font-heading text-base font-bold text-white">{browseCard.title}</h3>
               <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-navy-200">
-                Search, filter and compare every API by price, limits and availability.
+                {browseCard.description}
               </p>
             </div>
             <span className="relative z-10 mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary-foreground group-hover:underline">
-              Explore all APIs <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" />
+              {browseCard.linkLabel} <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" />
             </span>
           </Link>
         </Reveal>

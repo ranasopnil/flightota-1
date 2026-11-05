@@ -1,160 +1,29 @@
 "use client";
 
-import {
-  ArrowRight,
-  BookOpen,
-  Briefcase,
-  Building2,
-  ChevronDown,
-  Compass,
-  FileCode,
-  Globe,
-  Hotel,
-  Laptop,
-  type LucideIcon,
-  UserRound,
-  Newspaper,
-  PhoneCall,
-  Plane,
-  Search,
-  ShieldCheck,
-  Smartphone,
-  Sparkles,
-  Users,
-  Workflow,
-} from "lucide-react";
+import { ArrowRight, ChevronDown, Search, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/common/container";
+import { Icon } from "@/components/common/icon-map";
 import { Logo } from "@/components/common/logo";
 import { TopHeader } from "@/components/layout/top-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import type { ApiProductSummary } from "@/types/catalog";
+import type { MobileTab, NavItem, NavigationContent, TopBarSettings } from "@/types/pages";
 import { MobileBottomNav } from "./mobile-bottom-nav";
 import { ThemeToggle } from "./theme-toggle";
 
-export type HeaderProduct = Pick<ApiProductSummary, "slug" | "name" | "category" | "tagline" | "status">;
+type HeaderContent = NavigationContent["header"];
 
-interface NavItem {
-  title: string;
-  subtitle: string;
-  href: string;
-  icon: LucideIcon;
-  /** Short fact from the product's guide. */
-  tag?: string;
+interface SiteHeaderProps {
+  header: HeaderContent;
+  topBar: NavigationContent["topBar"];
+  mobileTabs: MobileTab[];
+  settings: TopBarSettings;
 }
-
-interface NavGroup {
-  title: string;
-  items: NavItem[];
-}
-
-interface NavMenu {
-  id: "apis" | "solutions" | "developers";
-  label: string;
-  href: string;
-  matches: string[];
-  groups: NavGroup[];
-  footer: { text: string; label: string; href: string };
-}
-
-const menus: NavMenu[] = [
-  {
-    id: "apis",
-    label: "APIs",
-    href: "/apis",
-    matches: ["/apis"],
-    groups: [
-      {
-        title: "Partner APIs",
-        items: [
-          { title: "Flights API", subtitle: "Search, book, ticket, refund and reissue, paid from your deposit", href: "/apis/air-travel-api", icon: Plane, tag: "5–30 s search" },
-          { title: "Hotels API", subtitle: "Find, book and cancel hotel stays worldwide", href: "/apis/hotel-api", icon: Hotel, tag: "10–40 s search" },
-          { title: "eSIM API", subtitle: "Travel eSIMs for 200+ countries and regions", href: "/apis/esim-api", icon: Globe, tag: "Issued at once" },
-          { title: "Transfers API", subtitle: "Private cars, vans and shuttles from hundreds of local providers", href: "/apis/airport-transfer-api", icon: Compass, tag: "Confirmed in seconds" },
-        ],
-      },
-      {
-        title: "More APIs",
-        items: [
-          { title: "Visa API", subtitle: "Visa requirements, documents and applications", href: "/apis/visa-api", icon: ShieldCheck },
-          { title: "Car Rental API", subtitle: "Compare and reserve rental cars", href: "/apis/car-rental-api", icon: Laptop },
-          { title: "Activities API", subtitle: "Tours and activities", href: "/apis/travel-activities-api", icon: Sparkles },
-        ],
-      },
-    ],
-    footer: { text: "Same keys and conventions across the partner APIs.", label: "Browse all APIs", href: "/apis" },
-  },
-  {
-    id: "solutions",
-    label: "Solutions",
-    href: "/solutions",
-    matches: ["/solutions"],
-    groups: [
-      {
-        title: "Portal development",
-        items: [
-          { title: "B2B Travel Development Portal", subtitle: "A portal for your agents, under your brand", href: "/solutions/b2b-travel-development-portal", icon: Users },
-          { title: "B2C Travel Development Portal", subtitle: "A booking website for your own customers", href: "/solutions/b2c-travel-development-portal", icon: Globe },
-          { title: "Flight Booking Portal", subtitle: "Search, book, ticket, refund and reissue", href: "/solutions/flight-booking-portal", icon: Plane },
-          { title: "Hotel Booking Portal", subtitle: "Find, book and cancel hotel stays", href: "/solutions/hotel-booking-portal", icon: Hotel },
-          { title: "eSIM Selling Portal", subtitle: "Travel eSIMs for 200+ countries and regions", href: "/solutions/esim-portal", icon: Smartphone },
-          { title: "Airport Transfer Portal", subtitle: "From the airport to the hotel door", href: "/solutions/transfer-booking-portal", icon: Compass },
-        ],
-      },
-      {
-        title: "Sell travel",
-        items: [
-          { title: "B2B Travel Agent Portal", subtitle: "Sub-agent distribution, deposit wallets and custom markups", href: "/solutions/b2b-travel-portal", icon: Users },
-          { title: "Consumer Booking Engine", subtitle: "Responsive booking engine for your own customers", href: "/solutions/b2c-booking-engine", icon: Globe },
-          { title: "Dynamic Packaging Engine", subtitle: "Flight, hotel and transfer bundles", href: "/solutions/dynamic-packaging-engine", icon: Sparkles },
-        ],
-      },
-      {
-        title: "Run operations",
-        items: [
-          { title: "Corporate Self-Booking Tool", subtitle: "Employee travel policies and manager approvals", href: "/solutions/corporate-booking-tool", icon: Briefcase },
-          { title: "Hotel Extranet & CRS", subtitle: "Direct hotel inventory and room allotment calendar", href: "/solutions/hotel-extranet-crs", icon: Hotel },
-          { title: "Travel ERP & Back-Office", subtitle: "PNR queues, multi-currency ledger and tax accounting", href: "/solutions/travel-erp-backoffice", icon: Workflow },
-        ],
-      },
-    ],
-    footer: { text: "Need a white-label deployment?", label: "Compare platform licenses", href: "/pricing#portal-solutions" },
-  },
-  {
-    id: "developers",
-    label: "Developers",
-    href: "/documentation",
-    matches: ["/documentation", "/guides", "/blog", "/about", "/contact"],
-    groups: [
-      {
-        title: "Build",
-        items: [
-          { title: "Documentation", subtitle: "Getting started, conventions, errors and every endpoint", href: "/documentation", icon: BookOpen },
-          { title: "Integration Guides", subtitle: "Step-by-step walkthroughs from sandbox to production", href: "/guides", icon: FileCode },
-          { title: "Blog", subtitle: "Release notes and engineering articles", href: "/blog", icon: Newspaper },
-        ],
-      },
-      {
-        title: "Company",
-        items: [
-          { title: "About", subtitle: "Who we are and what we build", href: "/about", icon: Building2 },
-          { title: "Contact", subtitle: "Speak with our team", href: "/contact", icon: PhoneCall },
-        ],
-      },
-    ],
-    footer: { text: "Sandbox keys are issued under API access.", label: "Get API access", href: "/register" },
-  },
-];
-
-const directLinks = [
-  { label: "Airlines", href: "/airlines" },
-  { label: "Pricing", href: "/pricing" },
-];
 
 const navItemClass = (active: boolean) =>
   cn(
@@ -164,11 +33,10 @@ const navItemClass = (active: boolean) =>
   );
 
 function NavLinkCard({ item, onNavigate, compact }: { item: NavItem; onNavigate?: () => void; compact?: boolean }) {
-  const Icon = item.icon;
   if (compact) {
     return (
       <Link href={item.href} onClick={onNavigate} className="flex items-center gap-2.5 rounded-md px-1 py-2 text-sm text-foreground active:bg-muted">
-        <Icon className="size-4 shrink-0 text-primary" aria-hidden />
+        <Icon name={item.icon} className="size-4 shrink-0 text-primary" />
         {item.title}
       </Link>
     );
@@ -176,7 +44,7 @@ function NavLinkCard({ item, onNavigate, compact }: { item: NavItem; onNavigate?
   return (
     <Link href={item.href} onClick={onNavigate} className="group flex items-start gap-3 rounded-lg p-2.5 transition-colors hover:bg-muted/70">
       <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-        <Icon className="size-4" aria-hidden />
+        <Icon name={item.icon} className="size-4" />
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex flex-wrap items-center gap-x-2 text-[13px] font-semibold text-foreground">
@@ -189,15 +57,16 @@ function NavLinkCard({ item, onNavigate, compact }: { item: NavItem; onNavigate?
   );
 }
 
-export function SiteHeader({}: { products?: HeaderProduct[] }) {
+export function SiteHeader({ header, topBar, mobileTabs, settings }: SiteHeaderProps) {
+  const { menus, directLinks } = header;
   const pathname = usePathname();
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<NavMenu["id"] | null>(null);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const openMenu = (id: NavMenu["id"]) => {
+  const openMenu = (id: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setActiveMenu(id);
   };
@@ -239,7 +108,7 @@ export function SiteHeader({}: { products?: HeaderProduct[] }) {
 
   return (
     <>
-      <TopHeader />
+      <TopHeader content={topBar} settings={settings} />
       <header
         onMouseLeave={scheduleClose}
         className={cn(
@@ -292,16 +161,16 @@ export function SiteHeader({}: { products?: HeaderProduct[] }) {
               <ThemeToggle />
             </span>
             <Button asChild variant="ghost" className="hidden rounded-lg px-3 text-[14px] font-medium sm:inline-flex">
-              <Link href="/login">Sign in</Link>
+              <Link href={header.signIn.href}>{header.signIn.label}</Link>
             </Button>
             <Button asChild className="hidden rounded-lg px-4 text-[14px] font-semibold sm:inline-flex">
-              <Link href="/register">
-                Get API access
+              <Link href={header.cta.href}>
+                {header.cta.label}
                 <ArrowRight className="size-3.5" />
               </Link>
             </Button>
             <Button asChild variant="ghost" size="icon" className="rounded-lg sm:hidden">
-              <Link href="/login" aria-label="Sign in">
+              <Link href={header.signIn.href} aria-label={header.signIn.label}>
                 <UserRound className="size-5" />
               </Link>
             </Button>
@@ -339,13 +208,14 @@ export function SiteHeader({}: { products?: HeaderProduct[] }) {
         )}
       </header>
 
-      <MobileDrawer open={mobileMenuOpen} onOpenChange={setMobileMenuOpen} />
-      <MobileBottomNav onOpenMenu={() => setMobileMenuOpen(true)} />
+      <MobileDrawer header={header} open={mobileMenuOpen} onOpenChange={setMobileMenuOpen} />
+      <MobileBottomNav tabs={mobileTabs} onOpenMenu={() => setMobileMenuOpen(true)} />
     </>
   );
 }
 
-function MobileDrawer({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+function MobileDrawer({ header, open, onOpenChange }: { header: HeaderContent; open: boolean; onOpenChange: (open: boolean) => void }) {
+  const { menus, directLinks } = header;
   const close = () => onOpenChange(false);
 
   return (
@@ -358,7 +228,7 @@ function MobileDrawer({ open, onOpenChange }: { open: boolean; onOpenChange: (op
         </SheetHeader>
 
         <nav aria-label="Mobile" className="flex-1">
-          <Accordion type="single" collapsible defaultValue="apis">
+          <Accordion type="single" collapsible defaultValue={menus[0]?.id}>
             {menus.map((menu) => (
               <AccordionItem key={menu.id} value={menu.id}>
                 <AccordionTrigger className="py-3 text-sm font-semibold hover:no-underline">{menu.label}</AccordionTrigger>
@@ -385,14 +255,14 @@ function MobileDrawer({ open, onOpenChange }: { open: boolean; onOpenChange: (op
             <ThemeToggle />
           </div>
           <Button asChild className="rounded-lg ">
-            <Link href="/register" onClick={close}>
-              Get API access
+            <Link href={header.cta.href} onClick={close}>
+              {header.cta.label}
               <ArrowRight className="size-4" />
             </Link>
           </Button>
           <Button asChild variant="outline" className="rounded-lg">
-            <Link href="/login" onClick={close}>
-              Sign in
+            <Link href={header.signIn.href} onClick={close}>
+              {header.signIn.label}
             </Link>
           </Button>
         </div>

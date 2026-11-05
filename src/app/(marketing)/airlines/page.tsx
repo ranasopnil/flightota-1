@@ -169,7 +169,7 @@ export default async function AirlinesPage() {
       </Container>
 
       {/* 8. Full-Width Flight Direct Connect CTA Band */}
-      <CtaBand title={page.cta.title} description={page.cta.description} />
+      <CtaBand cta={page.cta} />
     </div>
   );
 }

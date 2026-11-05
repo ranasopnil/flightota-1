@@ -5,118 +5,19 @@ import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play, Terminal } from "lu
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { imageSrc } from "@/lib/image-src";
+import { badgeToneClasses } from "@/lib/tones";
 import { cn } from "@/lib/utils";
-
-export interface HeroSlide {
-  id: string;
-  division: string;
-  tags: string[];
-  title: string;
-  description: string;
-  image: string;
-  alt: string;
-  primaryCta: {
-    label: string;
-    href: string;
-  };
-  secondaryCta: {
-    label: string;
-    href: string;
-  };
-  metric: {
-    label: string;
-    value: string;
-  };
-  accentColor?: string;
-  divisionBadgeClass?: string;
-}
-
-export const defaultHeroSlides: HeroSlide[] = [
-  {
-    id: "air-travel",
-    division: "DIV. 01",
-    divisionBadgeClass: "text-rose-300 bg-rose-500/20 border-rose-500/40",
-    tags: ["ONE-WAY, ROUND TRIP, MULTI-CITY", "STANDARD & BRANDED FARES", "PAID FROM YOUR DEPOSIT"],
-    title: "Search, Book, Ticket, Refund, Reissue and Void Flights",
-    description:
-      "One REST API sells every airline we carry. Most fares are held first and issued later from your deposit; instant fares are paid and ticketed in the booking call itself.",
-    image: "/images/hero/hero_flight.jpg",
-    alt: "Search, Book, Ticket, Refund, Reissue and Void Flights",
-    primaryCta: { label: "Explore Flight API", href: "/apis/air-travel-api" },
-    secondaryCta: { label: "Read the Guide", href: "/documentation/air-travel-api" },
-    metric: { label: "Search Answers In", value: "5–30 s" },
-    accentColor: "#dc0e18",
-  },
-  {
-    id: "hotel-network",
-    division: "DIV. 02",
-    divisionBadgeClass: "text-amber-300 bg-amber-500/20 border-amber-500/40",
-    tags: ["PAY NOW OR HOLD", "RATE RE-CHECK", "1–6 ROOMS PER SEARCH"],
-    title: "Find, Book and Cancel Hotel Stays Worldwide",
-    description:
-      "A stay takes five calls: find the destination, search hotels, list one hotel's rooms, re-check the chosen rate, book. Paid now, or held where the rate allows it.",
-    image: "/images/hero/hero_hotel.jpg",
-    alt: "Find, Book and Cancel Hotel Stays Worldwide",
-    primaryCta: { label: "Explore Hotel API", href: "/apis/hotel-api" },
-    secondaryCta: { label: "Read the Guide", href: "/documentation/hotel-api" },
-    metric: { label: "Results Stay Bookable", value: "15 min" },
-    accentColor: "#f59e0b",
-  },
-  {
-    id: "esim-telemetry",
-    division: "DIV. 03",
-    divisionBadgeClass: "text-emerald-300 bg-emerald-500/20 border-emerald-500/40",
-    tags: ["200+ COUNTRIES AND REGIONS", "QR AND ACTIVATION CODE", "ISSUED AT ONCE"],
-    title: "Travel eSIMs for 200+ Countries and Regions",
-    description:
-      "List the plans, buy one, and hand your customer the QR code and activation code from the same response. Orders are paid from your deposit and issued at once.",
-    image: "/images/hero/hero_esim.jpg",
-    alt: "Travel eSIMs for 200+ Countries and Regions",
-    primaryCta: { label: "Explore eSIM API", href: "/apis/esim-api" },
-    secondaryCta: { label: "Read the Guide", href: "/documentation/esim-api" },
-    metric: { label: "eSIMs of One Plan per Order", value: "1–5" },
-    accentColor: "#10b981",
-  },
-  {
-    id: "transfer-mobility",
-    division: "DIV. 04",
-    divisionBadgeClass: "text-cyan-300 bg-cyan-500/20 border-cyan-500/40",
-    tags: ["PRIVATE CARS, VANS, SHUTTLES", "ONE-WAY, RETURN, HOURLY", "CONFIRMED IN SECONDS"],
-    title: "Airport and City Transfers Worldwide",
-    description:
-      "Private cars, vans and shuttles from hundreds of local providers, paid from your deposit and confirmed in seconds. Search, pick a quote, book.",
-    image: "/images/hero/hero_transfer.jpg",
-    alt: "Airport and City Transfers Worldwide",
-    primaryCta: { label: "Explore Transfer API", href: "/apis/airport-transfer-api" },
-    secondaryCta: { label: "Read the Guide", href: "/documentation/airport-transfer-api" },
-    metric: { label: "Passengers per Search", value: "1–50" },
-    accentColor: "#06b6d4",
-  },
-  {
-    id: "visa-clearance",
-    division: "DIV. 05",
-    divisionBadgeClass: "text-purple-300 bg-purple-500/20 border-purple-500/40",
-    tags: ["140+ DESTINATIONS", "OCR PASSPORT VERIFICATION", "EMBASSY GATEWAY"],
-    title: "Automated Visa Intelligence & E-Visa Processing",
-    description:
-      "Real-time border eligibility rules, machine-readable passport OCR extraction, and automated electronic visa application filings for seamless travel readiness.",
-    image: "/images/hero/hero_visa.jpg",
-    alt: "Automated Visa Intelligence & E-Visa Processing",
-    primaryCta: { label: "Explore Visa API", href: "/apis/visa-api" },
-    secondaryCta: { label: "Developer Specs", href: "/documentation" },
-    metric: { label: "Approval Tracking", value: "Real-Time" },
-    accentColor: "#a855f7",
-  },
-];
+import type { HeroSlide } from "@/types/pages";
 
 interface HeroOverlaySliderProps {
-  slides?: HeroSlide[];
+  slides: HeroSlide[];
   intervalMs?: number;
   className?: string;
 }
 
 export function HeroOverlaySlider({
-  slides = defaultHeroSlides,
+  slides,
   intervalMs = 6000,
   className,
 }: HeroOverlaySliderProps) {
@@ -216,7 +117,7 @@ export function HeroOverlaySlider({
             className="relative w-full h-full"
           >
             <Image
-              src={currentSlide.image}
+              src={imageSrc(currentSlide.image)}
               alt={currentSlide.alt}
               fill
               priority
@@ -256,7 +157,7 @@ export function HeroOverlaySlider({
               <span
                 className={cn(
                   "text-[10px] sm:text-[11px] font-mono font-semibold tracking-wider px-2.5 py-0.5 rounded-lg uppercase border ",
-                  currentSlide.divisionBadgeClass || "text-emerald-300 bg-emerald-500/20 border-emerald-500/40"
+                  badgeToneClasses[currentSlide.badgeTone]
                 )}
               >
                 {currentSlide.division}

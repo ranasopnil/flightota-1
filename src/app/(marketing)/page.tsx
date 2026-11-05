@@ -16,6 +16,7 @@ import { SupplierNetwork } from "@/features/marketing/sections/supplier-network"
 import { Testimonials } from "@/features/marketing/sections/testimonials";
 import { TravelSolutions } from "@/features/marketing/sections/travel-solutions";
 import { getProduct, listCategories, listProducts } from "@/services/server/catalog-repository";
+import { getSingleton } from "@/services/server/cms-repository";
 
 export const metadata: Metadata = pageMetadata({
   title: `${siteConfig.name} — ${siteConfig.tagline}`,
@@ -25,27 +26,36 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default async function HomePage() {
-  const [categories, products, air] = await Promise.all([listCategories(), listProducts(), getProduct("air-travel-api")]);
+  const [home, pricing, categories, products, air] = await Promise.all([
+    getSingleton("home"),
+    getSingleton("pricing"),
+    listCategories(),
+    listProducts(),
+    getProduct("air-travel-api"),
+  ]);
   const endpointCount = products.reduce((sum, p) => sum + p.endpointCount, 0);
-  const partnerProducts = (await Promise.all(["hotel-api", "esim-api", "airport-transfer-api"].map(getProduct))).filter((p) => p !== null && p !== undefined);
+  const partnerSlugs = home.partnerApis.cards.map((c) => c.productSlug).filter((slug) => slug !== "air-travel-api");
+  const partnerProducts = (await Promise.all(partnerSlugs.map(getProduct))).filter((p) => p !== null && p !== undefined);
   const sampleEndpoint = air?.endpoints.find((e) => e.id === "flights-search");
 
   return (
     <>
-      <Hero />
-      <PartnerApis products={air ? [air, ...partnerProducts] : partnerProducts} />
-      <PartnerGetStarted />
-      <TravelSolutions />
-      <SupplierNetwork />
-      <DynamicPackaging />
-      <CorporateAndMidOffice />
-      <ApiCategories categories={categories} products={products} />
-      <PlatformStats endpointCount={endpointCount} />
-      {sampleEndpoint && <DeveloperExperience endpoint={sampleEndpoint} baseUrl={air?.access?.sandboxUrl ?? siteConfig.sandboxUrl} access={air?.access} />}
-      <PricingOverview />
-      <Testimonials />
-      <Faq />
-      <CtaBand />
+      <Hero content={home.hero} />
+      <PartnerApis products={air ? [air, ...partnerProducts] : partnerProducts} content={home.partnerApis} />
+      <PartnerGetStarted content={home.getStarted} />
+      <TravelSolutions content={home.travelSolutions} />
+      <SupplierNetwork content={home.supplierNetwork} />
+      <DynamicPackaging content={home.dynamicPackaging} />
+      <CorporateAndMidOffice content={home.corporate} />
+      <ApiCategories categories={categories} products={products} content={home.categories} />
+      <PlatformStats endpointCount={endpointCount} content={home.stats} />
+      {sampleEndpoint && (
+        <DeveloperExperience endpoint={sampleEndpoint} baseUrl={air?.access?.sandboxUrl ?? siteConfig.sandboxUrl} access={air?.access} content={home.developerExperience} />
+      )}
+      <PricingOverview content={home.pricingOverview} allPlans={pricing.plans} />
+      <Testimonials content={home.testimonials} />
+      <Faq content={home.faq} />
+      <CtaBand cta={home.cta} />
     </>
   );
 }

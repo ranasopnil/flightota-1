@@ -1,84 +1,33 @@
 import { Coins } from "lucide-react";
 import type { Metadata } from "next";
-import { staticPageMetadata } from "@/config/share";
-import Link from "next/link";
-import { PageHero } from "@/components/common/page-hero";
+import { CmsPageHero } from "@/components/common/cms-hero";
 import { Section, SectionHeader } from "@/components/common/section";
-import { ShareEmbedModal } from "@/components/common/share-embed-modal";
-import { Button } from "@/components/ui/button";
 import { FaqJsonLd, FaqList } from "@/components/marketing/faq-list";
-import { comparisonGroups, creditPacks, pricingFaqs, pricingPlans } from "@/constants/pricing";
+import { staticPageMetadata } from "@/config/share";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { ApiPricingTable } from "@/features/pricing/components/api-pricing-table";
 import { TravelPortalSolutionsPricing } from "@/features/pricing/components/travel-portal-solutions-pricing";
 import { PlanComparison } from "@/features/pricing/components/plan-comparison";
 import { PricingPlans } from "@/features/pricing/components/pricing-plans";
 import { listProducts } from "@/services/server/catalog-repository";
+import { getSingleton } from "@/services/server/cms-repository";
 import { formatCurrency, formatNumber } from "@/utils/format";
 
 export const metadata: Metadata = staticPageMetadata("/pricing");
 
 export default async function PricingPage() {
-  const products = await listProducts();
+  const [page, products] = await Promise.all([getSingleton("pricing"), listProducts()]);
+  const { sections } = page;
   return (
     <>
-      <PageHero
-        eyebrow={
-          <>
-            <Coins className="size-3 text-brand-300" />
-            PRICING &amp; PLANS
-          </>
-        }
-        badge="5,000 Free Calls / Month"
-        title="Simple pricing that scales with your bookings"
-        description="Start free in the sandbox. Go live with pay-as-you-go or a monthly plan with volume discounts. Pay only for successful transactions."
-        image="/images/heroes/pricing_lounge.jpg"
-        metrics={
-          <>
-            <span className="rounded-md border border-white/15 bg-slate-900/80 px-2.5 py-0.5 text-slate-200 backdrop-blur-md">
-              Zero Setup Fees
-            </span>
-            <span className="rounded-md border border-white/15 bg-slate-900/80 px-2.5 py-0.5 font-mono font-semibold text-emerald-400 backdrop-blur-md">
-              $0.002 / Search
-            </span>
-            <span className="rounded-md border border-white/15 bg-slate-900/80 px-2.5 py-0.5 text-slate-200 backdrop-blur-md">
-              100% Idempotent Retries
-            </span>
-          </>
-        }
-        actions={
-          <>
-            <Button asChild size="sm" className="rounded-lg text-xs font-semibold h-7 ">
-              <Link href="/register">
-                Start Free
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm" className="rounded-lg text-xs font-semibold h-7 border-white/20 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md">
-              <Link href="/contact?topic=sales">
-                Contact Sales
-              </Link>
-            </Button>
-            <ShareEmbedModal
-              path="/pricing"
-              size="sm"
-              variant="outline"
-              className="rounded-lg text-xs font-semibold h-7 border-white/20 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md"
-            />
-          </>
-        }
-      />
+      <CmsPageHero hero={page.hero} path="/pricing" />
 
       <Section className="pt-14">
-        <PricingPlans plans={pricingPlans} />
+        <PricingPlans plans={page.plans} annualDiscountLabel={page.annualDiscountLabel} enterpriseNote={page.enterpriseNote} />
       </Section>
 
       <Section tone="muted" id="api-pricing">
-        <SectionHeader
-          align="left"
-          eyebrow="API-specific pricing"
-          title="Per-request pricing for every API"
-          description="Requests beyond your plan's allowance, and all Pay As You Go usage, are billed at these rates with automatic volume tiers."
-        />
+        <SectionHeader align="left" eyebrow={sections.apiPricing.eyebrow} title={sections.apiPricing.title} description={sections.apiPricing.description} />
         <div className="mt-10">
           <ApiPricingTable products={products} />
         </div>
@@ -86,14 +35,9 @@ export default async function PricingPage() {
 
       <Section id="wallet">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-center">
-          <SectionHeader
-            align="left"
-            eyebrow="Credit wallet"
-            title="Prepay and get bonus credits"
-            description="Top up your wallet to cover usage and booking fees. Larger top-ups include bonus credits. Set alerts and hard limits to stay in control."
-          />
+          <SectionHeader align="left" eyebrow={sections.wallet.eyebrow} title={sections.wallet.title} description={sections.wallet.description} />
           <ul className="app-rail grid gap-4 sm:grid-cols-3">
-            {creditPacks.map((pack) => (
+            {page.creditPacks.map((pack) => (
               <li key={pack.id} className="flex flex-col rounded-lg border bg-card p-6">
                 <Coins className="size-6 text-primary" aria-hidden />
                 <p className="mt-4 font-heading text-2xl font-semibold">{formatCurrency(pack.price)}</p>
@@ -103,7 +47,7 @@ export default async function PricingPage() {
                     +{pack.bonusPercent}% bonus
                   </span>
                 ) : (
-                  <span className="mt-4 text-xs text-muted-foreground">1 credit = $1 of usage</span>
+                  <span className="mt-4 text-xs text-muted-foreground">{page.creditNote}</span>
                 )}
               </li>
             ))}
@@ -112,25 +56,25 @@ export default async function PricingPage() {
       </Section>
 
       <Section id="portal-solutions">
-        <TravelPortalSolutionsPricing />
+        <TravelPortalSolutionsPricing packages={page.portalPackages} header={sections.portal} />
       </Section>
 
       <Section tone="muted" id="compare-plans">
-        <SectionHeader align="left" eyebrow="Compare plans" title="Every plan, side by side" />
+        <SectionHeader align="left" eyebrow={sections.compare.eyebrow} title={sections.compare.title} description={sections.compare.description} />
         <div className="mt-10">
-          <PlanComparison plans={pricingPlans} groups={comparisonGroups} />
+          <PlanComparison plans={page.plans} groups={page.comparisonGroups} />
         </div>
       </Section>
 
       <Section id="pricing-faq">
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-          <SectionHeader align="left" eyebrow="FAQ" title="Billing questions" />
-          <FaqList items={pricingFaqs} />
+          <SectionHeader align="left" eyebrow={sections.faq.eyebrow} title={sections.faq.title} description={sections.faq.description} />
+          <FaqList items={page.faqs} />
         </div>
-        <FaqJsonLd items={pricingFaqs} />
+        <FaqJsonLd items={page.faqs} />
       </Section>
 
-      <CtaBand title="Need volume pricing or custom markup?" description="Talk to our team about enterprise contracts, supplier credentials and SLAs." />
+      <CtaBand cta={page.cta} />
     </>
   );
 }
