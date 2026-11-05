@@ -1,0 +1,360 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Class-based dark mode: <html class="dark"> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -------------------------------------------------------------------------- */
+/*  Design tokens                                                             */
+/*  Palette: brand red #dc0e18 · sea teal #00a99d · navy #29457e              */
+/*  Components only reference semantic tokens (primary, muted, border, ...).  */
+/* -------------------------------------------------------------------------- */
+:root {
+  --radius: 0.5rem;
+
+  --background: #ffffff;
+  --foreground: #0f1d36;
+  --card: #ffffff;
+  --card-foreground: #0f1d36;
+  --popover: #ffffff;
+  --popover-foreground: #0f1d36;
+
+  --primary: #dc0e18;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f2f6;
+  --secondary-foreground: #1b2f57;
+  --muted: #f5f7fa;
+  --muted-foreground: #5b6b85;
+  --accent: #f1f2f6;
+  --accent-foreground: #1b2f57;
+  --destructive: #dc2626;
+  --success: #16a34a;
+  --warning: #f59e0b;
+
+  --border: #e5e9f0;
+  --input: #dfe4ec;
+  --ring: #dc0e18;
+
+  --code: #0d1a33;
+  --code-foreground: #dbe4f3;
+
+  --chart-1: #dc0e18;
+  --chart-2: #00a99d;
+  --chart-3: #29457e;
+  --chart-4: #f59e0b;
+  --chart-5: #7c8aa5;
+
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #0f1d36;
+  --sidebar-primary: #dc0e18;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f2f6;
+  --sidebar-accent-foreground: #1b2f57;
+  --sidebar-border: #e5e9f0;
+  --sidebar-ring: #dc0e18;
+}
+
+.dark {
+  --background: #0a1326;
+  --foreground: #eef2f8;
+  --card: #101c33;
+  --card-foreground: #eef2f8;
+  --popover: #101c33;
+  --popover-foreground: #eef2f8;
+
+  --primary: #f0313a;
+  --primary-foreground: #ffffff;
+  --secondary: #17263f;
+  --secondary-foreground: #e3e9f4;
+  --muted: #13213a;
+  --muted-foreground: #9aa8c2;
+  --accent: #1a2a46;
+  --accent-foreground: #e3e9f4;
+  --destructive: #f05252;
+  --success: #22c55e;
+  --warning: #fbbf24;
+
+  --border: #22324f;
+  --input: #2a3b5a;
+  --ring: #f0313a;
+
+  --code: #060e1d;
+  --code-foreground: #dbe4f3;
+
+  --chart-1: #f0313a;
+  --chart-2: #20c4b6;
+  --chart-3: #7d9bd6;
+  --chart-4: #fbbf24;
+  --chart-5: #9aa8c2;
+
+  --sidebar: #0d182d;
+  --sidebar-foreground: #eef2f8;
+  --sidebar-primary: #f0313a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #17263f;
+  --sidebar-accent-foreground: #e3e9f4;
+  --sidebar-border: #22324f;
+  --sidebar-ring: #f0313a;
+}
+
+@theme inline {
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-code: var(--code);
+  --color-code-foreground: var(--code-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+}
+
+/* Raw brand scales, for illustrations, gradients and dark sections. */
+@theme {
+  --color-brand-50: #fff1f1;
+  --color-brand-100: #ffe2e0;
+  --color-brand-200: #ffc8c5;
+  --color-brand-300: #fd9c97;
+  --color-brand-400: #f65f58;
+  --color-brand-500: #ea252e;
+  --color-brand-600: #dc0e18;
+  --color-brand-700: #b90a13;
+  --color-brand-800: #990d15;
+  --color-brand-900: #7f1118;
+  --color-brand-950: #460409;
+
+  --color-sea-50: #effefb;
+  --color-sea-100: #d3f3f0;
+  --color-sea-200: #a8e7e1;
+  --color-sea-300: #6fd3c9;
+  --color-sea-400: #2fbdb1;
+  --color-sea-500: #00a99d;
+  --color-sea-600: #008a81;
+  --color-sea-700: #036e67;
+  --color-sea-800: #085853;
+  --color-sea-900: #0b4945;
+
+  --color-navy-50: #f5f7fa;
+  --color-navy-100: #e9eef5;
+  --color-navy-200: #cfd9ea;
+  --color-navy-300: #a6b8d7;
+  --color-navy-400: #7290c0;
+  --color-navy-500: #4f6ea6;
+  --color-navy-600: #3c578b;
+  --color-navy-700: #29457e;
+  --color-navy-800: #1b2f57;
+  --color-navy-900: #0f1d36;
+  --color-navy-950: #081225;
+
+  --animate-marquee: marquee 40s linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+    @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  ::selection {
+    background: var(--color-brand-100);
+    color: var(--color-brand-900);
+  }
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(15 29 54 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(15 29 54 / 0.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .bg-grid-light {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .dark .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  }
+  .text-gradient {
+    background-image: linear-gradient(100deg, var(--color-navy-800) 0%, var(--color-brand-600) 60%, var(--color-brand-500) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .dark .text-gradient {
+    background-image: linear-gradient(100deg, #ffffff 0%, var(--color-brand-300) 60%, var(--color-sea-300) 100%);
+  }
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 55%, transparent);
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* App-sized type and spacing on phones. Tailwind sizes are rem, so everything scales together. */
+@media (max-width: 639px) {
+  html {
+    font-size: 14.5px;
+  }
+}
+
+/* Prevent mobile browser / iOS Safari auto-zoom on input focus */
+@media screen and (max-width: 640px) {
+  input,
+  textarea,
+  select,
+  [data-slot="input"],
+  [data-slot="textarea"],
+  [data-slot="select-trigger"] {
+    font-size: 16px !important;
+  }
+}
+
+/* App-like behaviour on touch screens */
+@media (hover: none) {
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+}
+
+/* Card rows swipe sideways on phones and return to their grid from sm up */
+@media (max-width: 639px) {
+  .app-rail {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0.625rem;
+    margin-inline: -0.75rem;
+    padding-inline: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 0.75rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .app-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .app-rail > * {
+    flex: 0 0 82%;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  /* Tables read as stacked cards on phones. Cells carry their column name in data-label. */
+  .app-table {
+    min-width: 0 !important;
+  }
+  .app-table thead {
+    display: none;
+  }
+  .app-table tbody,
+  .app-table tr,
+  .app-table td {
+    display: block;
+    width: 100%;
+  }
+  .app-table tr {
+    padding: 0.625rem 0.75rem;
+  }
+  .app-table td {
+    padding: 0.125rem 0 !important;
+  }
+  .app-table td[data-label]:not([data-label=""])::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+}
+
+/* A carousel never widens the page, wherever it sits in a grid or flex row */
+.swiper {
+  max-width: 100%;
+  min-width: 0;
+}
