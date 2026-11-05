@@ -2,7 +2,7 @@
 
 Frontend for a B2B travel API marketplace and developer platform, built with Next.js 16 (App Router, Cache Components), TypeScript, Tailwind CSS v4, shadcn/ui (Radix), Redux Toolkit + RTK Query, React Hook Form + Zod, Framer Motion and Sonner.
 
-> This repository is the **frontend only**. The NestJS gateway, database and supplier adapters are a separate application. Until that backend exists, a small mock API under `src/app/api/v1` answers the frontend's requests.
+> This repository is the **frontend only**. The admin backend (catalog, editable content, leads, media) is the separate `flightotaBackend` repository. Without a backend configured, the bundled data under `src/mocks/catalog` and `src/content` answers every request, so the site builds and runs on its own.
 
 ## Getting started
 
@@ -17,9 +17,22 @@ npm run lint
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL (metadata, sitemap) |
-| `NEXT_PUBLIC_API_BASE_URL` | Base URL used by RTK Query. Defaults to the mock API at `/api/v1`. Point it at the NestJS gateway when that is ready. |
-| `API_INTERNAL_URL` | Optional. When set, Server Components fetch catalog data from the backend instead of the bundled mock. |
+| `NEXT_PUBLIC_API_BASE_URL` | Base URL used by RTK Query. Defaults to `/api/v1`, which the web server routes to the admin backend. |
+| `API_INTERNAL_URL` | Optional. When set, Server Components fetch the catalog and all editable content from the admin backend instead of the bundled data. |
+| `REVALIDATE_SECRET` | Shared with the admin backend; `POST /api/revalidate` refreshes cached content after an edit. |
 | `NEXT_PUBLIC_GATEWAY_URL` | Public API gateway URL shown in docs and code samples |
+
+## Editable content (CMS)
+
+Everything editorial on the site is data: page copy, navigation, SEO cards, blog posts, guides, legal documents, solutions, the airline directory and the partner API guides. The shapes live in `src/types/pages.ts`, `src/types/content.ts`, `src/types/solutions.ts` and `src/types/airlines.ts`; `src/types/cms.ts` lists every type.
+
+- `src/content/**` holds the bundled data: the fallback when `API_INTERNAL_URL` is unset, and the seed source for the admin database.
+- `src/services/server/cms-repository.ts` exposes `getSingleton(type)`, `listEntries(type)` and `getEntry(type, slug)`. Every read is cached (`"use cache"`) under the tags `cms`, `cms:<type>` and `cms:<type>:<slug>`; the admin panel revalidates those tags after a save (`src/app/api/revalidate/route.ts`).
+- Icons are referenced by key (`src/lib/icon-keys.ts`, resolved in `src/components/common/icon-map.tsx`); colour tones by name (`src/lib/tones.ts`). Images are paths under `/images` or, for admin uploads, `/uploads`.
+- `npm run cms:seed` exports the bundled data as JSON for the backend (`cms-seed/`); `API_INTERNAL_URL=… npm run cms:parity` checks that a backend serves exactly the bundled data.
+
+Pages read their content once at the top (server components) and pass it down; client components receive plain JSON props.
+
 
 ## Status
 
@@ -38,9 +51,9 @@ npm run lint
 ```
 src/
   app/
-    (marketing)/          public site: home, apis, apis/[slug], apis/compare, pricing,
+    (marketing)/          public site: home, apis, apis/[slug], apis/compare, pricing, solutions(+[slug]), airlines,
                           documentation(+[slug], openapi.json), guides, blog, about, contact, terms, privacy
-    api/v1/               mock API (catalog, contact, newsletter) — dev stand-in only
+    api/v1/               mock API (catalog, contact, newsletter) — dev stand-in only; api/revalidate refreshes caches
     sitemap.ts, robots.ts, not-found.tsx
   components/
     ui/                   shadcn/ui primitives (generated, themed by tokens)
@@ -54,8 +67,9 @@ src/
   redux/                  store (combineSlices), typed hooks, slices/
   services/
     api/                  RTK Query: base-api (auth header, re-auth on 401, error normalization) + injected endpoints
-    server/               server-only repositories (catalog, content) for Server Components
-  mocks/                  catalog data, content, mock HTTP helpers
+    server/               server-only repositories (catalog-repository, cms-repository, seo) for Server Components
+  content/                bundled editable content (fallback + seed source), see "Editable content"
+  mocks/                  catalog data, partner API helpers, mock HTTP helpers
   lib/                    utils, code-sample generator, OpenAPI builder, Zod schemas
   config/ constants/ types/ utils/
 ```
@@ -74,4 +88,4 @@ The palette comes from the flightota reference: brand red `#dc0e18`, sea teal `#
 
 ### Placeholders to replace before launch
 
-Partner names, testimonials and headline stats (`src/constants/marketing.ts`), the office address (`src/config/site.ts`), SDK package names, blog and guide content (`src/mocks/content`), and the legal templates (`src/mocks/content/legal.ts`, which need legal review).
+Partner names, testimonials and headline stats (home page), the office address (site settings), SDK package names, blog and guide content, and the legal templates (which need legal review) are all editable in the admin panel; their bundled defaults live under `src/content`.

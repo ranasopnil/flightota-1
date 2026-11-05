@@ -60,6 +60,7 @@ function DetailSection({
 
 export default async function ApiDetailPage({ params }: PageProps<"/apis/[slug]">) {
   const { slug } = await params;
+  const settings = await getSingleton("site-settings");
   const product = await getProduct(slug);
   if (!product) notFound();
   const category = await getCategory(product.category);
@@ -86,7 +87,7 @@ export default async function ApiDetailPage({ params }: PageProps<"/apis/[slug]"
     name: product.name,
     description: product.description,
     documentation: `${siteConfig.url}/documentation/${product.slug}`,
-    provider: { "@type": "Organization", name: siteConfig.legalName },
+    provider: { "@type": "Organization", name: settings.legalName },
   };
 
   const productImageMap: Record<string, string> = {
