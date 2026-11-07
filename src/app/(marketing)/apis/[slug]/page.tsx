@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/common/container";
+import { BreadcrumbJsonLd } from "@/components/common/json-ld";
 import { siteConfig } from "@/config/site";
 import { ApiDetailHeader } from "@/features/api-detail/components/api-detail-header";
 import { EndpointList } from "@/features/api-detail/components/endpoint-list";
@@ -103,6 +104,7 @@ export default async function ApiDetailPage({ params }: PageProps<"/apis/[slug]"
 
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "APIs", path: "/apis" }, { name: product.name, path: `/apis/${product.slug}` }]} />
       <ApiDetailHeader product={product} category={category} />
       <SectionNav sections={sections} />
 

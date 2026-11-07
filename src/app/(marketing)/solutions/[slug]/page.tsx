@@ -6,10 +6,13 @@ import { Button } from "@/components/ui/button";
 import { HeroActions } from "@/components/common/cms-hero";
 import { Container } from "@/components/common/container";
 import { Icon } from "@/components/common/icon-map";
+import { BreadcrumbJsonLd, JsonLd } from "@/components/common/json-ld";
 import { PageHero } from "@/components/common/page-hero";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { TravelErpShowcase } from "@/features/solutions/components/travel-erp-showcase";
+import { siteConfig } from "@/config/site";
 import { imageSrc } from "@/lib/image-src";
+import { serviceLd } from "@/lib/structured-data";
 import { getEntry, getSingleton, listEntries } from "@/services/server/cms-repository";
 import { cmsPageMetadata } from "@/services/server/seo";
 
@@ -32,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function SolutionDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const [solution, page] = await Promise.all([getEntry("solutions", slug), getSingleton("solutions-page")]);
+  const [solution, page, settings] = await Promise.all([getEntry("solutions", slug), getSingleton("solutions-page"), getSingleton("site-settings")]);
 
   if (!solution) {
     notFound();
@@ -43,6 +46,8 @@ export default async function SolutionDetailPage({ params }: PageProps) {
 
   return (
     <>
+      <JsonLd data={serviceLd(solution, { path: `/solutions/${slug}`, siteUrl: siteConfig.url, siteName: settings.name })} />
+      <BreadcrumbJsonLd crumbs={[{ name: "Solutions", path: "/solutions" }, { name: solution.title, path: `/solutions/${slug}` }]} />
       {/* Solution Hero */}
       <PageHero
         eyebrow={

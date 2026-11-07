@@ -6,7 +6,7 @@ export const solutionsPage: SolutionsPageContent = {
     eyebrowIcon: "Workflow",
     badge: "Enterprise Platform Suite",
     title: "Complete Travel Software & Portal Solutions",
-    description: "Inspired by global travel leaders like Travelopro, we provide booking engines, sub-agent distribution networks, corporate travel systems, and central reservation ERPs.",
+    description: "We build booking engines, sub-agent distribution networks, corporate travel systems and central reservation ERPs on one unified travel API.",
     image: "/images/solutions/b2b_portal.jpg",
     metrics: [{ text: "12 Solutions" }, { text: "700+ Global Airlines", accent: true }, { text: "1.2M+ Accommodations" }],
     actions: [

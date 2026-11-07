@@ -75,7 +75,8 @@ const VISA_SCENARIOS: EndpointScenario[] = [
     path: "/visa/v1/requirements?nationality=BD&destination=JP&purpose=tourism",
     description: "Verify visa requirement, eVisa availability, and transit rules by passport",
     curlCode: `curl -X GET "https://sandbox.flightota.com/visa/v1/requirements?nationality=BD&destination=JP&purpose=tourism" \\
-  -H "Authorization: Bearer YOUR_SANDBOX_KEY"`,
+  -H "X-Api-Key: YOUR_KEY_ID" \\
+  -H "X-Api-Secret: YOUR_SECRET"`,
     nodeCode: `import { FlightOTAClient } from "@flightota/sdk";
 
 const flightota = new FlightOTAClient({ apiKey: "YOUR_SANDBOX_KEY" });
@@ -132,7 +133,8 @@ print(f"Requirement: {reqs.data.requirement} | eVisa Available: {reqs.data.evisa
     path: "/visa/v1/countries/JP/visa-types/tourist_single/documents",
     description: "Inspect required biometric photo specs, financial proof, and format rules",
     curlCode: `curl -X GET "https://sandbox.flightota.com/visa/v1/countries/JP/visa-types/tourist_single/documents" \\
-  -H "Authorization: Bearer YOUR_SANDBOX_KEY"`,
+  -H "X-Api-Key: YOUR_KEY_ID" \\
+  -H "X-Api-Secret: YOUR_SECRET"`,
     nodeCode: `const docs = await flightota.visa.countries.getDocuments("JP", "tourist_single");
 console.log(docs.data.documents.map(d => d.name));`,
     pythonCode: `docs = client.visa.countries.get_documents("JP", "tourist_single")
@@ -180,7 +182,8 @@ for doc in docs.data.documents:
     path: "/visa/v1/applications/validate",
     description: "Scan passport MRZ and check for 6-month validity compliance before submission",
     curlCode: `curl -X POST "https://sandbox.flightota.com/visa/v1/applications/validate" \\
-  -H "Authorization: Bearer YOUR_SANDBOX_KEY" \\
+  -H "X-Api-Key: YOUR_KEY_ID" \\
+  -H "X-Api-Secret: YOUR_SECRET" \\
   -H "Content-Type: application/json" \\
   -d '{
     "country_iso": "JP",
@@ -227,7 +230,8 @@ print("Eligibility Check:", validation.data.eligible)`,
     path: "/visa/v1/applications",
     description: "Transmit applicant dossier to government consular portal and receive tracking ID",
     curlCode: `curl -X POST "https://sandbox.flightota.com/visa/v1/applications" \\
-  -H "Authorization: Bearer YOUR_SANDBOX_KEY" \\
+  -H "X-Api-Key: YOUR_KEY_ID" \\
+  -H "X-Api-Secret: YOUR_SECRET" \\
   -H "Content-Type: application/json" \\
   -d '{
     "destination": "JP",
@@ -275,7 +279,8 @@ print("Application Submitted:", app.data.tracking_id)`,
     path: "/visa/v1/applications/app_vsa_98234871/status",
     description: "Check consular review progress and download official PDF grant letter",
     curlCode: `curl -X GET "https://sandbox.flightota.com/visa/v1/applications/app_vsa_98234871/status" \\
-  -H "Authorization: Bearer YOUR_SANDBOX_KEY"`,
+  -H "X-Api-Key: YOUR_KEY_ID" \\
+  -H "X-Api-Secret: YOUR_SECRET"`,
     nodeCode: `const status = await flightota.visa.applications.getStatus("app_vsa_98234871");
 console.log("Decision:", status.data.decision);`,
     pythonCode: `status = client.visa.applications.get_status("app_vsa_98234871")

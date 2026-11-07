@@ -125,7 +125,7 @@ export function HeroConsole({ baseUrl }: { baseUrl: string }) {
           </span>
         </div>
         <div className="text-navy-400">
-          <span className="text-sea-300">Authorization</span>: Bearer tvx_live_••••••••3f9a
+          <span className="text-sea-300">X-Api-Key</span>: ak_live_••••••••3f9a
         </div>
 
         <div className="rounded-lg border border-white/10 bg-white/[0.03]">

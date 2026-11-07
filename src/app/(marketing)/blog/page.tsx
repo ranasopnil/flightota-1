@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/common/cms-hero";
+import { BreadcrumbJsonLd } from "@/components/common/json-ld";
 import { Container } from "@/components/common/container";
 import { imageSrc } from "@/lib/image-src";
 import { getSingleton, listEntries } from "@/services/server/cms-repository";
@@ -18,6 +19,7 @@ export default async function BlogPage() {
   const [featured, ...rest] = [...posts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Blog", path: "/blog" }]} />
       <CmsPageHero hero={page.hero} path="/blog" />
       <Container className="py-14">
         {featured && (

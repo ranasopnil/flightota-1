@@ -5,6 +5,7 @@ import { ArrowRight, Check, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CmsPageHero } from "@/components/common/cms-hero";
+import { BreadcrumbJsonLd } from "@/components/common/json-ld";
 import { Container } from "@/components/common/container";
 import { CtaBand } from "@/features/marketing/sections/cta-band";
 import { imageSrc } from "@/lib/image-src";
@@ -19,6 +20,7 @@ export default async function SolutionsPage() {
   const [page, solutions] = await Promise.all([getSingleton("solutions-page"), listEntries("solutions")]);
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Solutions", path: "/solutions" }]} />
       <CmsPageHero hero={page.hero} path="/solutions" />
 
       <Container className="py-12 sm:py-16 space-y-12">

@@ -10,9 +10,9 @@ export const seo: SeoContent = {
   defaultImage: og("hero_flight"),
   pages: {
     "/": {
-      title: "FlightOTA — One API. Endless Travel Possibilities.",
+      title: "Travel Portal Development & API Aggregator | FlightOTA",
       description:
-        "FlightOTA is a unified travel API platform. Search, price and book flights, hotels, eSIMs, visas, transfers and more through one consistent, developer-friendly API.",
+        "Build B2B and B2C travel portals with FlightOTA. Unified GDS, NDC and LCC API integrations, white-label booking engines, hotels and transfers.",
       image: og("hero_flight"),
       absoluteTitle: true,
     },

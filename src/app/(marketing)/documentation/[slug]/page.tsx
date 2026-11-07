@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CategoryIcon } from "@/components/common/category-icon";
+import { BreadcrumbJsonLd } from "@/components/common/json-ld";
 import { ShareButton } from "@/components/common/share-button";
 import { StatusBadge } from "@/components/common/status-badge";
 import { EndpointReference, EndpointSignature } from "@/components/documentation/endpoint-reference";
@@ -42,6 +43,7 @@ export default async function ApiReferencePage({ params }: PageProps<"/documenta
 
   return (
     <div>
+      <BreadcrumbJsonLd crumbs={[{ name: "Documentation", path: "/documentation" }, { name: `${product.name} reference`, path: `/documentation/${product.slug}` }]} />
       <header className="relative mb-4 overflow-hidden rounded-lg border border-slate-800 bg-slate-950 p-4 sm:mb-6 sm:p-6 text-white ">
         <Image
           src={imageSrc(overview.productHeroImages[product.slug] ?? overview.defaultProductHeroImage)}

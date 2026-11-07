@@ -59,7 +59,7 @@ export const airlinesPage: AirlinesPageContent = {
     bodyEyebrow: "Automated Ticketing Queues",
     bodyTitle: "Unified Multi-GDS Consolidation & Instant Ticketing",
     bodyText:
-      "Inspired by enterprise travel portals like Travelopro, our flight distribution core bridges traditional GDS terminals with modern JSON APIs. Query Amadeus MasterPricer, Sabre Bargain Finder Max, and Travelport Galileo concurrently with split-ticketing intelligence.",
+      "Our flight distribution core bridges traditional GDS terminals with modern JSON APIs. Query Amadeus MasterPricer, Sabre Bargain Finder Max and Travelport Galileo concurrently with split-ticketing intelligence.",
     features: [
       { title: "Split-Ticketing Engine", text: "Combine different airlines for outbound and return legs for lowest net fares." },
       { title: "Automated PNR Queue", text: "Automated ticketing time-limit tracking, void window monitoring, and schedule sync." },

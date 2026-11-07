@@ -8,8 +8,23 @@ export const home: HomePageContent = {
   hero: {
     slides: [
       {
-        id: "air-travel",
+        id: "travel-technology",
         division: "DIV. 01",
+        badgeTone: "rose",
+        tags: ["B2B & B2C TRAVEL PORTALS", "GDS, NDC & LCC AGGREGATION", "WHITE-LABEL BOOKING ENGINES"],
+        title: "All-in-One Travel Portal Development & API Aggregation",
+        description:
+          "Build, launch and scale your online travel business with FlightOTA. Our complete travel technology platform combines B2B and B2C booking portal development, white-label travel software, GDS connectivity, NDC airline distribution, LCC integrations and multi-supplier travel APIs into one unified solution.",
+        image: "/images/solutions/b2b_portal.jpg",
+        alt: "All-in-One Travel Portal Development & API Aggregation",
+        primaryCta: { label: "Request a Demo", href: "/contact?topic=sales" },
+        secondaryCta: { label: "Explore API Documentation", href: "/documentation" },
+        metric: { label: "One Contract Covers", value: "GDS · NDC · LCC" },
+        accentColor: "#dc0e18",
+      },
+      {
+        id: "air-travel",
+        division: "DIV. 02",
         badgeTone: "rose",
         tags: ["ONE-WAY, ROUND TRIP, MULTI-CITY", "STANDARD & BRANDED FARES", "PAID FROM YOUR DEPOSIT"],
         title: "Search, Book, Ticket, Refund, Reissue and Void Flights",
@@ -24,7 +39,7 @@ export const home: HomePageContent = {
       },
       {
         id: "hotel-network",
-        division: "DIV. 02",
+        division: "DIV. 03",
         badgeTone: "amber",
         tags: ["PAY NOW OR HOLD", "RATE RE-CHECK", "1–6 ROOMS PER SEARCH"],
         title: "Find, Book and Cancel Hotel Stays Worldwide",
@@ -39,7 +54,7 @@ export const home: HomePageContent = {
       },
       {
         id: "esim-telemetry",
-        division: "DIV. 03",
+        division: "DIV. 04",
         badgeTone: "emerald",
         tags: ["200+ COUNTRIES AND REGIONS", "QR AND ACTIVATION CODE", "ISSUED AT ONCE"],
         title: "Travel eSIMs for 200+ Countries and Regions",
@@ -54,7 +69,7 @@ export const home: HomePageContent = {
       },
       {
         id: "transfer-mobility",
-        division: "DIV. 04",
+        division: "DIV. 05",
         badgeTone: "cyan",
         tags: ["PRIVATE CARS, VANS, SHUTTLES", "ONE-WAY, RETURN, HOURLY", "CONFIRMED IN SECONDS"],
         title: "Airport and City Transfers Worldwide",
@@ -69,7 +84,7 @@ export const home: HomePageContent = {
       },
       {
         id: "visa-clearance",
-        division: "DIV. 05",
+        division: "DIV. 06",
         badgeTone: "purple",
         tags: ["140+ DESTINATIONS", "OCR PASSPORT VERIFICATION", "EMBASSY GATEWAY"],
         title: "Automated Visa Intelligence & E-Visa Processing",
@@ -135,7 +150,7 @@ export const home: HomePageContent = {
       eyebrow: "Travel Technology Solutions",
       title: "End-to-End Travel Platforms for Modern OTAs & Agents",
       description:
-        "Inspired by global travel software leaders like Travelopro, our cloud platform delivers B2B agent networks, high-conversion B2C booking engines, white-label portals, and central reservation systems.",
+        "Our cloud platform delivers B2B agent networks, high-conversion B2C booking engines, white-label portals and central reservation systems, all built on the same unified travel API that powers our flight, hotel and ancillary products.",
     },
     items: [
       {
@@ -326,7 +341,7 @@ export const home: HomePageContent = {
       eyebrow: "Enterprise Business Automation",
       title: "Corporate Travel Tools, Itinerary Builders & Supplier Extranets",
       description:
-        "Travelopro-scale travel technology goes beyond simple search APIs. We deliver the mid-office software, policy approval engines, and bespoke tour planning tools that corporate TMCs and high-volume tour operators rely on daily.",
+        "Enterprise travel technology goes beyond simple search APIs. We deliver the mid-office software, policy approval engines and bespoke tour planning tools that corporate TMCs and high-volume tour operators rely on daily.",
     },
     capabilitiesLabel: "Key Capabilities",
     modules: [

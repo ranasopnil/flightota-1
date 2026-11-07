@@ -13,6 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s · ${settings.name}`,
       default: `Authentication · ${settings.name}`,
     },
+    // Sign-in screens are not search results.
+    robots: { index: false, follow: true },
   };
 }
 

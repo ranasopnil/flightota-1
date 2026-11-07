@@ -33,7 +33,7 @@ export const about: AboutPageContent = {
       label: "The FlightOTA Standard (Fast & Unified)",
       title: "One unified contract with normalized JSON APIs",
       items: [
-        "Single Bearer API key unlocks flights, hotels, eSIM, visas, and airport transfers.",
+        "One key pair (X-Api-Key and X-Api-Secret headers) unlocks flights, hotels, eSIM, visas, and airport transfers.",
         "100% idempotent booking endpoints with automated 24h void windows and zero duplicate charges.",
         "Structured RFC 7807 error responses with request IDs and instant sandbox simulation.",
         "Automated multi-carrier failover circuit breakers and transparent volume-based billing.",

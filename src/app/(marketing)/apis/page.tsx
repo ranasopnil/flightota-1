@@ -235,7 +235,7 @@ export default async function MarketplacePage({ searchParams }: PageProps<"/apis
             </div>
           </div>
 
-          {/* Travelopro-scale Enterprise Travel Modules Showcase */}
+          {/* Enterprise Travel Modules Showcase */}
           <div className="mt-4 rounded-lg border border-border bg-muted/30 p-4 sm:mt-8 sm:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b sm:gap-4 sm:pb-6">
               <div>

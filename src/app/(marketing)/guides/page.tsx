@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/common/cms-hero";
+import { BreadcrumbJsonLd } from "@/components/common/json-ld";
 import { Container } from "@/components/common/container";
 import { imageSrc } from "@/lib/image-src";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,7 @@ export default async function GuidesPage() {
   const [page, guides] = await Promise.all([getSingleton("guides-page"), listEntries("guides")]);
   return (
     <>
+      <BreadcrumbJsonLd crumbs={[{ name: "Guides", path: "/guides" }]} />
       <CmsPageHero hero={page.hero} path="/guides" />
       <Container className="py-14">
         <ul className="app-rail grid gap-6 md:grid-cols-2">
