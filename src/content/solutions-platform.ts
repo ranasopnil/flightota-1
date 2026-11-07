@@ -531,4 +531,56 @@ export const platformSolutions: TravelSolution[] = [
       },
     ],
   },
+  {
+    slug: "white-label-travel-portal",
+    seo: {
+      title: "White-Label Travel Portal — Launch Under Your Own Brand",
+      description:
+        "A hosted white-label travel portal for agencies and OTAs: your logo, domain and vouchers, B2B agent logins or a B2C storefront, flights, hotels and more from one API, ready without building from scratch.",
+      image: "/images/og/b2b_portal.jpg",
+    },
+    group: "platform",
+    title: "White-Label Travel Portal",
+    tagline: "A hosted travel portal under your own brand",
+    eyebrow: "WHITE-LABEL PORTAL",
+    badge: "Hosted and branded for you",
+    badgeTone: "emerald",
+    description:
+      "A ready-made travel portal that runs under your brand: your logo, your domain, your colours, and tickets and vouchers that carry your company details. Choose the B2B agent portal, the B2C booking engine or both, and launch without building the software yourself.",
+    heroImage: "/images/platforms/white-label.jpg",
+    metrics: [
+      { label: "Branding", value: "Logo, colours, vouchers" },
+      { label: "Channels", value: "B2B, B2C or both" },
+      { label: "Inventory", value: "Flights, hotels, eSIM, transfers" },
+      { label: "Licence", value: "Monthly" },
+    ],
+    keyBenefits: [
+      { title: "Your brand on every screen", desc: "Logo, colours and typography are yours, and e-tickets, hotel vouchers and invoices are formatted with your company details, not ours.", icon: "Tag" },
+      { title: "Agents or customers, same platform", desc: "License the B2B sub-agent portal with deposit wallets and tiered markups, the B2C booking engine with customer checkout, or run both from one back office.", icon: "Users" },
+      { title: "Supplier content included", desc: "GDS, NDC and low-cost airlines, hotel bed banks, eSIMs and transfers are already connected; there is nothing to integrate before you sell.", icon: "Globe" },
+      { title: "Hosted and maintained", desc: "We run and update the portal; you set markups, manage agents or customers and watch bookings from the admin.", icon: "ShieldCheck" },
+    ],
+    coreCapabilities: [
+      "Branded e-tickets, hotel vouchers and invoices with your logo and contact details",
+      "B2B portal with sub-agent accounts, deposit wallets and tiered markups",
+      "B2C booking engine with fare calendar, seat maps and local payment gateways",
+      "Flights, hotels, eSIMs and transfers from pre-integrated suppliers",
+      "Markups by product, airline or route without disclosing net costs",
+      "Role-based staff logins with audit logs",
+    ],
+    architectureSteps: [
+      { step: "01", title: "Pick the licence", desc: "B2B sub-agent portal, B2C booking engine, or both, from the platform licences on the pricing page." },
+      { step: "02", title: "Brand it", desc: "Send your logo, colours and company details; vouchers, tickets and emails are formatted with them." },
+      { step: "03", title: "Set your rules", desc: "Define markups by product, airline or route, agent credit limits or customer payment options, and staff roles." },
+      { step: "04", title: "Go live", desc: "The portal is deployed under your brand with supplier content already connected, and your team starts selling." },
+    ],
+    faqs: [
+      { question: "What exactly is white-labelled?", answer: "The portal your agents or customers see: logo, colours, typography, domain, and the e-tickets, hotel vouchers and invoices they download, which carry your company details only." },
+      { question: "Is this the same as the B2B travel agent portal?", answer: "The B2B agent portal and the B2C booking engine are the products you license; white-label is how they are delivered, under your brand. This page explains the branding and launch; those pages explain each product in depth." },
+      { question: "Do we need our own supplier contracts?", answer: "No. Airlines across GDS, NDC and low-cost sources, hotel bed banks, eSIMs and transfers are already connected. Bookings run through the platform and are paid from your deposit." },
+      { question: "Can we change the design later?", answer: "Yes. Colours, fonts, logo and the header and footer can be customised, and your branding on documents is updated with them." },
+      { question: "Who hosts and maintains the portal?", answer: "FlightOTA. The portal is a hosted product on a monthly licence; you manage agents, customers, markups and bookings from the admin while we run the software." },
+      { question: "Can a white-label portal grow into a custom build?", answer: "Yes. The same API behind the portal is available for a custom B2B or B2C development portal when you need features the licensed products do not have." },
+    ],
+  },
 ];

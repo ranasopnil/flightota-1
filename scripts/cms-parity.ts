@@ -1,10 +1,12 @@
 /**
  * Compare what the backend serves with the bundled content. Exits non-zero on
  * any difference, so a seeded backend and the bundle are known to be identical.
+ * Drafts (`draftSlugs`) are unpublished on the backend, so they are left out of
+ * the bundled side of the comparison.
  *
  *   API_INTERNAL_URL=http://127.0.0.1:4000/v1 npm run cms:parity
  */
-import { bundledCollections, bundledSingletons } from "@/content";
+import { bundledCollections, bundledSingletons, draftSlugs } from "@/content";
 import { COLLECTION_TYPES, SINGLETON_TYPES } from "@/types/cms";
 
 const base = process.env.API_INTERNAL_URL;
@@ -53,7 +55,9 @@ async function main() {
     if (diff) failures += 1;
   }
   for (const type of COLLECTION_TYPES) {
-    const diff = firstDiff(normalize(bundledCollections[type]), normalize(await get(`/content/${type}`)));
+    const drafts = draftSlugs[type] ?? [];
+    const published = (bundledCollections[type] as { slug: string }[]).filter((entry) => !drafts.includes(entry.slug));
+    const diff = firstDiff(normalize(published), normalize(await get(`/content/${type}`)));
     console.log(`${diff ? "DIFF" : "OK  "} ${type}${diff ? `  ${diff}` : ""}`);
     if (diff) failures += 1;
   }

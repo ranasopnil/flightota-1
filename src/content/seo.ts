@@ -57,6 +57,12 @@ export const seo: SeoContent = {
       description: "Step-by-step guides for integrating flight, hotel, eSIM, visa and transfer APIs, from first request to production.",
       image: og("guides_planning"),
     },
+    "/integrations": {
+      title: "GDS, NDC & LCC API Integrations — Amadeus, Sabre, Travelport",
+      description:
+        "Integrate GDS, NDC and LCC airline content through one flight API: Amadeus, Sabre and Travelport consolidation, airline direct connects and low-cost carriers, with ticketing, refunds and reissues paid from your deposit.",
+      image: og("hero_flight"),
+    },
     "/pricing": {
       title: "Pricing",
       description:

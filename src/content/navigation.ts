@@ -45,6 +45,8 @@ export const navigation: NavigationContent = {
               { title: "Hotel Booking Portal", subtitle: "Find, book and cancel hotel stays", href: "/solutions/hotel-booking-portal", icon: "Hotel" },
               { title: "eSIM Selling Portal", subtitle: "Travel eSIMs for 200+ countries and regions", href: "/solutions/esim-portal", icon: "Smartphone" },
               { title: "Airport Transfer Portal", subtitle: "From the airport to the hotel door", href: "/solutions/transfer-booking-portal", icon: "Compass" },
+              { title: "Online Travel Agency Development", subtitle: "Start or rebuild an OTA on one travel API", href: "/solutions/online-travel-agency-development", icon: "Building2" },
+              { title: "Travel API Aggregation", subtitle: "Many suppliers, one REST API", href: "/solutions/travel-api-aggregation", icon: "Layers" },
             ],
           },
           {
@@ -53,6 +55,7 @@ export const navigation: NavigationContent = {
               { title: "B2B Travel Agent Portal", subtitle: "Sub-agent distribution, deposit wallets and custom markups", href: "/solutions/b2b-travel-portal", icon: "Users" },
               { title: "Consumer Booking Engine", subtitle: "Responsive booking engine for your own customers", href: "/solutions/b2c-booking-engine", icon: "Globe" },
               { title: "Dynamic Packaging Engine", subtitle: "Flight, hotel and transfer bundles", href: "/solutions/dynamic-packaging-engine", icon: "Sparkles" },
+              { title: "White-Label Travel Portal", subtitle: "A hosted travel portal under your own brand", href: "/solutions/white-label-travel-portal", icon: "Tag" },
             ],
           },
           {
@@ -65,6 +68,31 @@ export const navigation: NavigationContent = {
           },
         ],
         footer: { text: "Need a white-label deployment?", label: "Compare platform licenses", href: "/pricing#portal-solutions" },
+      },
+      {
+        id: "integrations",
+        label: "Integrations",
+        href: "/integrations",
+        matches: ["/integrations"],
+        groups: [
+          {
+            title: "Distribution channels",
+            items: [
+              { title: "GDS API Integration", subtitle: "Amadeus, Sabre and Travelport content through one flight API", href: "/integrations/gds-api-integration", icon: "Globe" },
+              { title: "NDC API Integration", subtitle: "Airline direct connects: fare families, extras and order references", href: "/integrations/ndc-api-integration", icon: "Plane" },
+              { title: "LCC API Integration", subtitle: "Low-cost carriers with their bags, seats and meals, ticketed at once", href: "/integrations/lcc-api-integration", icon: "Zap" },
+            ],
+          },
+          {
+            title: "GDS providers",
+            items: [
+              { title: "Amadeus API Integration", subtitle: "MasterPricer and Amadeus NDC content", href: "/integrations/amadeus-api-integration", icon: "Layers" },
+              { title: "Sabre API Integration", subtitle: "Bargain Finder Max in your search results", href: "/integrations/sabre-api-integration", icon: "Search" },
+              { title: "Travelport API Integration", subtitle: "Galileo content as JSON instead of XML", href: "/integrations/travelport-api-integration", icon: "Compass" },
+            ],
+          },
+        ],
+        footer: { text: "Every connection is sold through the same Flights API.", label: "All integrations", href: "/integrations" },
       },
       {
         id: "developers",
@@ -147,6 +175,9 @@ export const navigation: NavigationContent = {
           { label: "Corporate Self-Booking Tool", href: "/solutions/corporate-booking-tool" },
           { label: "Hotel Extranet & CRS", href: "/solutions/hotel-extranet-crs" },
           { label: "Travel ERP & Back-Office", href: "/solutions/travel-erp-backoffice" },
+          { label: "Online Travel Agency Development", href: "/solutions/online-travel-agency-development" },
+          { label: "White-Label Travel Portal", href: "/solutions/white-label-travel-portal" },
+          { label: "Travel API Aggregation", href: "/solutions/travel-api-aggregation" },
           { label: "All Enterprise Solutions →", href: "/solutions" },
         ],
       },
@@ -158,6 +189,10 @@ export const navigation: NavigationContent = {
           { label: "Global eSIM Roaming API", href: "/apis/esim-api" },
           { label: "Consular Visa API", href: "/apis/visa-api" },
           { label: "Airport Transfers API", href: "/apis/airport-transfer-api" },
+          { label: "GDS API Integration", href: "/integrations/gds-api-integration" },
+          { label: "NDC API Integration", href: "/integrations/ndc-api-integration" },
+          { label: "LCC API Integration", href: "/integrations/lcc-api-integration" },
+          { label: "All Integrations →", href: "/integrations" },
           { label: "Explore All APIs →", href: "/apis" },
         ],
       },

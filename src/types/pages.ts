@@ -6,6 +6,7 @@
 import type { IconKey } from "@/lib/icon-keys";
 import type { BadgeTone } from "@/lib/tones";
 import type { ApiGuideBlock } from "./content";
+import type { IntegrationGroup } from "./integrations";
 import type { ComparisonGroup, CreditPack, PricingPlan } from "./pricing";
 
 /* ---------- shared building blocks ---------- */
@@ -372,6 +373,18 @@ export interface SolutionsPageContent {
     ctaTitleTemplate: string;
     ctaDescription: string;
   };
+  cta: Partial<CtaContent>;
+}
+
+/* ---------- integrations pages ---------- */
+
+export interface IntegrationsPageContent {
+  hero: HeroCopy;
+  /** Headings for the two groups of integration pages on the list page. */
+  groups: Record<IntegrationGroup, SectionCopy>;
+  cardCtaLabel: string;
+  /** Heading above the related links on every integration page. */
+  relatedTitle: string;
   cta: Partial<CtaContent>;
 }
 

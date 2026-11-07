@@ -1,7 +1,8 @@
 import type { AirlineItem } from "./airlines";
 import type { ApiGuideEntry, BlogPost, Guide, LegalDocumentEntry } from "./content";
+import type { IntegrationPage } from "./integrations";
 import type {
-  AboutPageContent, AirlinesPageContent, ContactPageContent, DocsOverviewContent, HomePageContent, ListPageContent,
+  AboutPageContent, AirlinesPageContent, ContactPageContent, DocsOverviewContent, HomePageContent, IntegrationsPageContent, ListPageContent,
   NavigationContent, PricingContent, SeoContent, SiteSettings, SolutionsPageContent,
 } from "./pages";
 import type { TravelSolution } from "./solutions";
@@ -17,6 +18,7 @@ export interface CmsSingletons {
   "airlines-page": AirlinesPageContent;
   pricing: PricingContent;
   "solutions-page": SolutionsPageContent;
+  "integrations-page": IntegrationsPageContent;
   "blog-page": ListPageContent;
   "guides-page": ListPageContent;
   "docs-overview": DocsOverviewContent;
@@ -28,6 +30,7 @@ export interface CmsCollections {
   guides: Guide;
   legal: LegalDocumentEntry;
   solutions: TravelSolution;
+  integrations: IntegrationPage;
   airlines: AirlineItem;
   "api-guides": ApiGuideEntry;
 }
@@ -38,7 +41,7 @@ export type CmsType = SingletonType | CollectionType;
 
 export const SINGLETON_TYPES = [
   "site-settings", "navigation", "seo", "home", "about", "contact", "airlines-page", "pricing", "solutions-page",
-  "blog-page", "guides-page", "docs-overview",
+  "integrations-page", "blog-page", "guides-page", "docs-overview",
 ] as const satisfies readonly SingletonType[];
 
-export const COLLECTION_TYPES = ["blog", "guides", "legal", "solutions", "airlines", "api-guides"] as const satisfies readonly CollectionType[];
+export const COLLECTION_TYPES = ["blog", "guides", "legal", "solutions", "integrations", "airlines", "api-guides"] as const satisfies readonly CollectionType[];

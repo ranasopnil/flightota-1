@@ -1,6 +1,5 @@
 import type { Article } from "@/types/content";
 import type { SiteSettings } from "@/types/pages";
-import type { TravelSolution } from "@/types/solutions";
 
 /**
  * JSON-LD builders. Every value here must match what the page shows: search
@@ -99,17 +98,25 @@ export function articleLd(article: Article, { type, path, siteUrl, siteName, ima
   };
 }
 
-export function serviceLd(solution: TravelSolution, { path, siteUrl, siteName }: { path: string; siteUrl: string; siteName: string }): JsonLdObject {
+/** What a Service needs from a page; solutions and integration pages both have these fields. */
+export interface ServiceSource {
+  title: string;
+  description: string;
+  eyebrow: string;
+  heroImage: string;
+}
+
+export function serviceLd(service: ServiceSource, { path, siteUrl, siteName }: { path: string; siteUrl: string; siteName: string }): JsonLdObject {
   const url = absolute(siteUrl, path);
   return {
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${url}#service`,
-    name: solution.title,
-    description: solution.description,
-    serviceType: solution.eyebrow,
+    name: service.title,
+    description: service.description,
+    serviceType: service.eyebrow,
     url,
-    image: absolute(siteUrl, solution.heroImage),
+    image: absolute(siteUrl, service.heroImage),
     provider: { "@type": "Organization", "@id": organizationId(siteUrl), name: siteName },
     areaServed: "Worldwide",
   };

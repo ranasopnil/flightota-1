@@ -30,6 +30,7 @@ Everything editorial on the site is data: page copy, navigation, SEO cards, blog
 - `src/services/server/cms-repository.ts` exposes `getSingleton(type)`, `listEntries(type)` and `getEntry(type, slug)`. Every read is cached (`"use cache"`) under the tags `cms`, `cms:<type>` and `cms:<type>:<slug>`; the admin panel revalidates those tags after a save (`src/app/api/revalidate/route.ts`).
 - Icons are referenced by key (`src/lib/icon-keys.ts`, resolved in `src/components/common/icon-map.tsx`); colour tones by name (`src/lib/tones.ts`). Images are paths under `/images` or, for admin uploads, `/uploads`.
 - `npm run cms:seed` exports the bundled data as JSON for the backend (`cms-seed/`); `API_INTERNAL_URL=… npm run cms:parity` checks that a backend serves exactly the bundled data.
+- `draftSlugs` in `src/content/index.ts` lists entries that are drafts: the seed marks them unpublished, bundled reads hide them and the parity check skips them. Remove a slug once the entry is published in the admin panel.
 
 Pages read their content once at the top (server components) and pass it down; client components receive plain JSON props.
 

@@ -33,6 +33,9 @@ export async function resolvePageSeo(path: string, overrides?: Partial<ResolvedS
   if (slug && section === "solutions") {
     const e = await getEntry("solutions", slug);
     if (e) Object.assign(entry, { title: e.seo?.title ?? e.title, description: e.seo?.description ?? e.description, image: e.seo?.image ?? e.heroImage });
+  } else if (slug && section === "integrations") {
+    const e = await getEntry("integrations", slug);
+    if (e) Object.assign(entry, { title: e.seo?.title ?? e.title, description: e.seo?.description ?? e.description, image: e.seo?.image ?? e.heroImage });
   } else if (slug && section === "blog") {
     const e = await getEntry("blog", slug);
     if (e) Object.assign(entry, { title: e.seo?.title ?? e.title, description: e.seo?.description ?? e.excerpt, image: e.seo?.image ?? e.image });
