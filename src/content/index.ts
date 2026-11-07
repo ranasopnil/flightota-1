@@ -59,10 +59,4 @@ export const bundledOnly: ReadonlySet<CmsType> = new Set<CmsType>([]);
  * marks them unpublished, the bundle hides them, and the parity check skips
  * them. Remove a slug here once its entry is published.
  */
-export const draftSlugs: { readonly [K in CollectionType]?: readonly string[] } = {
-  solutions: ["online-travel-agency-development", "white-label-travel-portal", "travel-api-aggregation"],
-  integrations: [
-    "gds-api-integration", "ndc-api-integration", "lcc-api-integration",
-    "amadeus-api-integration", "sabre-api-integration", "travelport-api-integration",
-  ],
-};
+export const draftSlugs: { readonly [K in CollectionType]?: readonly string[] } = {};

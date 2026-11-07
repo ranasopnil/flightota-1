@@ -8,7 +8,7 @@ export const solutionsPage: SolutionsPageContent = {
     title: "Complete Travel Software & Portal Solutions",
     description: "We build booking engines, sub-agent distribution networks, corporate travel systems and central reservation ERPs on one unified travel API.",
     image: "/images/solutions/b2b_portal.jpg",
-    metrics: [{ text: "12 Solutions" }, { text: "700+ Global Airlines", accent: true }, { text: "1.2M+ Accommodations" }],
+    metrics: [{ text: "15 Solutions" }, { text: "700+ Global Airlines", accent: true }, { text: "1.2M+ Accommodations" }],
     actions: [
       { label: "Book Platform Demo", href: "/contact?topic=sales", variant: "primary" },
       { label: "View Pricing →", href: "/pricing#portal-solutions", variant: "outline" },
