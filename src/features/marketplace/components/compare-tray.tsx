@@ -24,7 +24,8 @@ export function CompareTray({ products }: { products: { slug: string; name: stri
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
-          className="fixed inset-x-3 bottom-20 sm:bottom-4 z-40 mx-auto max-w-3xl rounded-xl border bg-card/95 p-3 backdrop-blur-lg sm:inset-x-6"
+          // .compare-tray: hides the floating actions stack on small screens while the tray is open
+          className="compare-tray fixed inset-x-3 bottom-20 sm:bottom-4 z-40 mx-auto max-w-3xl rounded-xl border bg-card/95 p-3 backdrop-blur-lg sm:inset-x-6"
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <ul className="flex flex-1 flex-wrap gap-2">

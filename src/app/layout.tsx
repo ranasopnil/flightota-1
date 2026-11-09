@@ -4,7 +4,6 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { NavigationLoader } from "@/components/layout/navigation-loader";
-import { ScrollToTop } from "@/components/common/scroll-to-top";
 import { siteConfig } from "@/config/site";
 import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from "@/lib/seo";
 import { getSingleton } from "@/services/server/cms-repository";
@@ -61,7 +60,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <TooltipProvider delayDuration={150}>
               <NavigationLoader />
               {children}
-              <ScrollToTop />
               <Toaster position="top-right" richColors closeButton />
             </TooltipProvider>
           </StoreProvider>

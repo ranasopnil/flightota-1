@@ -13,7 +13,8 @@ export function MobileStickyAction({
   return (
     <aside
       aria-label="Mobile quick actions"
-      className="fixed bottom-14 left-0 right-0 z-30 border-t border-border/80 bg-background/95 p-2.5 backdrop-blur-xl lg:hidden "
+      // .mobile-sticky-action: the floating actions stack (WhatsApp, back to top) moves above this bar
+      className="mobile-sticky-action fixed bottom-14 left-0 right-0 z-30 border-t border-border/80 bg-background/95 p-2.5 backdrop-blur-xl lg:hidden"
     >
       <div className="flex items-center justify-between gap-2 max-w-md mx-auto">
         <div className="flex flex-col min-w-0">

@@ -3,7 +3,7 @@ import { getSingleton } from "@/services/server/cms-repository";
 import { getVisitorRegion } from "@/services/server/visitor-region";
 
 /**
- * Floating "chat on WhatsApp" button, bottom right. The number follows the
+ * "Chat on WhatsApp" button, placed by FloatingActions. The number follows the
  * visitor's office (Site settings → Regional contact details); the default
  * number, label and pre-filled message live under Site settings → WhatsApp.
  * Reads request headers through getVisitorRegion: render inside <Suspense>.
@@ -19,7 +19,7 @@ export async function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="group fixed right-4 bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] z-40 flex h-14 items-center rounded-full bg-[#25D366] pr-3.5 pl-3.5 text-white shadow-lg shadow-black/25 transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 focus-visible:outline-none lg:right-6 lg:bottom-6"
+      className="group pointer-events-auto relative flex h-14 items-center rounded-full bg-[#25D366] pr-3.5 pl-3.5 text-white shadow-lg shadow-black/25 transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 focus-visible:outline-none"
     >
       <WhatsAppIcon className="size-7 shrink-0" />
       <span className="hidden max-w-0 overflow-hidden text-sm font-semibold whitespace-nowrap opacity-0 transition-all duration-300 group-hover:max-w-48 group-hover:pl-2 group-hover:opacity-100 group-focus-visible:max-w-48 group-focus-visible:pl-2 group-focus-visible:opacity-100 lg:block">

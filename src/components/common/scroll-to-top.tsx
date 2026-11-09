@@ -49,8 +49,8 @@ export function ScrollToTop() {
           transition={{ duration: 0.22, ease: "easeOut" }}
           aria-label={`Scroll back to top (${Math.round(scrollProgress)}% scrolled)`}
           className={cn(
-            // Positioning: floats above bottom navigation on mobile, standard bottom-right on desktop
-            "fixed bottom-20 right-3 sm:right-6 lg:bottom-7 lg:right-7 z-40",
+            // Positioned by the floating-actions stack in the marketing layout, above the WhatsApp button
+            "pointer-events-auto relative",
             // Button size & shape
             "group flex size-11 items-center justify-center rounded-lg cursor-pointer",
             // Glassmorphism & Elevation

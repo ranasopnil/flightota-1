@@ -3,8 +3,8 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { RegionalAddress, RegionalAddressFallback, RegionalPhone, RegionalPhoneFallback } from "@/components/layout/regional-contact";
 import { ShareProvider } from "@/components/common/share-context";
+import { FloatingActions } from "@/components/common/floating-actions";
 import { SiteStructuredData } from "@/components/common/site-structured-data";
-import { WhatsAppButton } from "@/components/common/whatsapp-button";
 import { getSingleton } from "@/services/server/cms-repository";
 
 /*
@@ -67,9 +67,7 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <Footer />
-      <Suspense fallback={null}>
-        <WhatsAppButton />
-      </Suspense>
+      <FloatingActions />
     </ShareDefaults>
   );
 }
