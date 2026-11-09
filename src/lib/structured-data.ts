@@ -1,3 +1,4 @@
+import { fallbackRegion } from "@/lib/contact-regions";
 import type { Article } from "@/types/content";
 import type { SiteSettings } from "@/types/pages";
 
@@ -35,9 +36,17 @@ export function organizationLd(settings: SiteSettings, siteUrl: string): JsonLdO
     logo: logo(siteUrl),
     description: settings.description,
     email: settings.salesEmail,
-    telephone: settings.phone,
+    telephone: fallbackRegion(settings.contactRegions).phone,
     contactPoint: [
-      { "@type": "ContactPoint", contactType: "sales", email: settings.salesEmail, telephone: settings.phone, availableLanguage: ["en"] },
+      // One sales line per office; visitors from its `areaServed` countries see that number on the site.
+      ...settings.contactRegions.regions.map((region) => ({
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: settings.salesEmail,
+        telephone: region.phone,
+        availableLanguage: ["en"],
+        ...(region.countries.length ? { areaServed: region.countries } : {}),
+      })),
       { "@type": "ContactPoint", contactType: "customer support", email: settings.supportEmail, availableLanguage: ["en"] },
     ],
     ...(sameAs.length ? { sameAs } : {}),

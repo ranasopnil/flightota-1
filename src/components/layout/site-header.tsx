@@ -23,6 +23,8 @@ interface SiteHeaderProps {
   topBar: NavigationContent["topBar"];
   mobileTabs: MobileTab[];
   settings: TopBarSettings;
+  /** Server-rendered phone link for the visitor's office (see the marketing layout). */
+  phone?: React.ReactNode;
 }
 
 const navItemClass = (active: boolean) =>
@@ -57,7 +59,7 @@ function NavLinkCard({ item, onNavigate, compact }: { item: NavItem; onNavigate?
   );
 }
 
-export function SiteHeader({ header, topBar, mobileTabs, settings }: SiteHeaderProps) {
+export function SiteHeader({ header, topBar, mobileTabs, settings, phone }: SiteHeaderProps) {
   const { menus, directLinks } = header;
   const pathname = usePathname();
   const router = useRouter();
@@ -108,7 +110,7 @@ export function SiteHeader({ header, topBar, mobileTabs, settings }: SiteHeaderP
 
   return (
     <>
-      <TopHeader content={topBar} settings={settings} />
+      <TopHeader content={topBar} settings={settings} phone={phone} />
       <header
         onMouseLeave={scheduleClose}
         className={cn(

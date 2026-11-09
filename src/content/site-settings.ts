@@ -1,6 +1,10 @@
 import type { SiteSettings } from "@/types/pages";
 
-/** Site identity and contact details. URLs (site, gateway) stay in `@/config/env`. */
+/**
+ * Site identity and contact details. URLs (site, gateway) stay in `@/config/env`.
+ * The Dubai and USA phone numbers and the street addresses are placeholders:
+ * replace them in the admin panel (Site settings → Regional contact details).
+ */
 export const siteSettings: SiteSettings = {
   name: "FlightOTA",
   legalName: "FlightOTA Technologies Ltd.",
@@ -22,10 +26,43 @@ export const siteSettings: SiteSettings = {
   ],
   supportEmail: "support@flightota.com",
   salesEmail: "sales@flightota.com",
-  phone: "+880 1700-000000",
-  phoneHref: "tel:+8801700000000",
   address: "Dhaka, Bangladesh",
-  footerAddress: "Gulshan-2, Dhaka 1212 • Singapore Hub",
+  contactRegions: {
+    fallback: "us",
+    regions: [
+      {
+        key: "bd",
+        label: "Dhaka office",
+        countries: ["BD"],
+        phone: "+880 1332-564506",
+        phoneHref: "tel:+8801332564506",
+        addressLines: ["Gulshan-2, Dhaka 1212", "Bangladesh"],
+        whatsapp: "8801332564506",
+      },
+      {
+        key: "me",
+        label: "Dubai office",
+        countries: ["AE", "SA", "QA", "KW", "OM", "BH", "JO", "IQ", "LB", "SY", "YE", "PS", "EG", "IR", "TR", "IL"],
+        phone: "+971 4 000 0000",
+        phoneHref: "tel:+97140000000",
+        addressLines: ["Dubai", "United Arab Emirates"],
+      },
+      {
+        key: "us",
+        label: "USA office",
+        countries: [],
+        phone: "+1 (000) 000-0000",
+        phoneHref: "tel:+10000000000",
+        addressLines: ["United States"],
+      },
+    ],
+  },
+  whatsapp: {
+    enabled: true,
+    number: "8801332564506",
+    label: "Chat on WhatsApp",
+    message: "Hello FlightOTA, I would like to know more about your travel technology solutions.",
+  },
   copyrightYear: 2026,
   social: {
     github: "https://github.com",

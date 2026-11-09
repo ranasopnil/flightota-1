@@ -64,6 +64,38 @@ export interface CtaContent {
 
 /* ---------- site settings ---------- */
 
+/** One office; its phone and address are shown to visitors from `countries`. */
+export interface ContactRegion {
+  /** Stable id referenced by `ContactRegions.fallback`, e.g. "bd". */
+  key: string;
+  /** Office name shown above the address, e.g. "Dhaka office". */
+  label: string;
+  /** ISO 3166-1 alpha-2 codes served by this office; empty for the fallback office. */
+  countries: string[];
+  phone: string;
+  phoneHref: string;
+  /** Postal address, one entry per line. */
+  addressLines: string[];
+  /** WhatsApp number as digits with country code; empty = the site default. */
+  whatsapp?: string;
+}
+
+export interface ContactRegions {
+  /** Key of the office shown when the visitor's country matches none or is unknown. */
+  fallback: string;
+  regions: ContactRegion[];
+}
+
+/** The floating WhatsApp button. */
+export interface WhatsAppSettings {
+  enabled: boolean;
+  /** Digits with country code, e.g. 8801700000000. */
+  number: string;
+  label: string;
+  /** Text pre-filled in the chat. */
+  message: string;
+}
+
 export interface SiteSettings {
   name: string;
   legalName: string;
@@ -72,12 +104,11 @@ export interface SiteSettings {
   keywords: string[];
   supportEmail: string;
   salesEmail: string;
-  phone: string;
-  phoneHref: string;
   /** Short office line shown on the contact page. */
   address: string;
-  /** Address line shown in the footer. */
-  footerAddress: string;
+  /** Offices by visitor country: header phone, footer address and WhatsApp number. */
+  contactRegions: ContactRegions;
+  whatsapp: WhatsAppSettings;
   copyrightYear: number;
   social: { github: string; x: string; linkedin: string };
   /** Defaults for the CTA band; pages override title/description. */
@@ -85,7 +116,7 @@ export interface SiteSettings {
 }
 
 /** The slice of the settings the client-side header needs. */
-export type TopBarSettings = Pick<SiteSettings, "supportEmail" | "phone" | "phoneHref" | "social">;
+export type TopBarSettings = Pick<SiteSettings, "supportEmail" | "social">;
 
 /* ---------- navigation ---------- */
 

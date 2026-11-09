@@ -32,6 +32,8 @@ Everything editorial on the site is data: page copy, navigation, SEO cards, blog
 - `npm run cms:seed` exports the bundled data as JSON for the backend (`cms-seed/`); `API_INTERNAL_URL=… npm run cms:parity` checks that a backend serves exactly the bundled data.
 - `draftSlugs` in `src/content/index.ts` lists entries that are drafts: the seed marks them unpublished, bundled reads hide them and the parity check skips them. Remove a slug once the entry is published in the admin panel.
 
+- The header phone, footer address and WhatsApp number follow the visitor's country. nginx looks the country up (GeoIP) and passes it as `X-Country-Code`; `src/services/server/visitor-region.ts` picks the office from Site settings → Regional contact details, and the components in `src/components/layout/regional-contact.tsx` render inside their own `<Suspense>` so the rest of the page stays static. Without the header (local development) the fallback office is shown; `/api/geo?set=AE` previews another office for an hour.
+
 Pages read their content once at the top (server components) and pass it down; client components receive plain JSON props.
 
 
@@ -89,4 +91,4 @@ The palette comes from the flightota reference: brand red `#dc0e18`, sea teal `#
 
 ### Placeholders to replace before launch
 
-Partner names, testimonials and headline stats (home page), the office address (site settings), SDK package names, blog and guide content, and the legal templates (which need legal review) are all editable in the admin panel; their bundled defaults live under `src/content`.
+Partner names, testimonials and headline stats (home page), the office phone numbers, addresses and WhatsApp number (site settings → regional contact details; the Dubai and USA numbers are zeros), SDK package names, blog and guide content, and the legal templates (which need legal review) are all editable in the admin panel; their bundled defaults live under `src/content`.

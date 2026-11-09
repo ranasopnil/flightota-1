@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Fragment } from "react";
-import { Mail, MapPin } from "lucide-react";
+import { Mail } from "lucide-react";
 import { Container } from "@/components/common/container";
 import { Icon } from "@/components/common/icon-map";
 import { Logo } from "@/components/common/logo";
@@ -8,7 +8,16 @@ import { GithubIcon, LinkedinIcon, XIcon } from "@/components/common/social-icon
 import { NewsletterForm } from "@/features/marketing/components/newsletter-form";
 import type { NavigationContent, SiteSettings } from "@/types/pages";
 
-export function SiteFooter({ footer, settings }: { footer: NavigationContent["footer"]; settings: SiteSettings }) {
+export function SiteFooter({
+  footer,
+  settings,
+  contact,
+}: {
+  footer: NavigationContent["footer"];
+  settings: SiteSettings;
+  /** Address and phone of the office nearest the visitor, rendered on the server (RegionalAddress). */
+  contact?: React.ReactNode;
+}) {
   const socials = [
     { label: "GitHub", href: settings.social.github, Icon: GithubIcon },
     { label: "X", href: settings.social.x, Icon: XIcon },
@@ -65,10 +74,7 @@ export function SiteFooter({ footer, settings }: { footer: NavigationContent["fo
 
               {/* Compact Direct Contacts */}
               <div className="space-y-1.5 text-xs text-navy-300 pt-1">
-                <div className="flex items-center gap-2">
-                  <MapPin className="size-3.5 shrink-0 text-primary" />
-                  <span>{settings.footerAddress}</span>
-                </div>
+                {contact}
                 <div className="flex items-center gap-2">
                   <Mail className="size-3.5 shrink-0 text-primary" />
                   <a href={`mailto:${settings.supportEmail}`} className="hover:text-white transition-colors">

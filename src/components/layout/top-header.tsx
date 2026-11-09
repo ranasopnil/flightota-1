@@ -4,7 +4,6 @@ import { useState, useEffect, useSyncExternalStore, useMemo } from "react";
 import Link from "next/link";
 import {
   Mail,
-  Phone,
   Globe,
   ChevronDown,
   ArrowRight,
@@ -24,7 +23,16 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 
-export function TopHeader({ content, settings }: { content: NavigationContent["topBar"]; settings: TopBarSettings }) {
+export function TopHeader({
+  content,
+  settings,
+  phone,
+}: {
+  content: NavigationContent["topBar"];
+  settings: TopBarSettings;
+  /** Phone link of the office nearest the visitor, rendered on the server (RegionalPhone). */
+  phone?: React.ReactNode;
+}) {
   const { announcements, currencies, quickLinks } = content;
   const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -97,17 +105,8 @@ export function TopHeader({ content, settings }: { content: NavigationContent["t
 
           <span className="text-white/20 hidden sm:inline">•</span>
 
-          {/* Hotline / Telephone */}
-          <a
-            href={settings.phoneHref}
-            className="hidden sm:inline-flex items-center gap-1.5 font-medium text-slate-200 hover:text-white transition-colors group"
-            aria-label="Direct support line"
-          >
-            <span className="flex size-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/30 transition-colors">
-              <Phone className="size-2.5" />
-            </span>
-            <span>{settings.phone}</span>
-          </a>
+          {/* Hotline: the office nearest the visitor */}
+          {phone}
         </div>
 
         {/* Center: Live Dynamic Announcement Ticker (Desktop) */}
